@@ -16,7 +16,7 @@ OpenSakuraMenu
 
 OnMenu
 {
-	case reference[0]
+	case reference0
 	{
 		when "main"
 		{
