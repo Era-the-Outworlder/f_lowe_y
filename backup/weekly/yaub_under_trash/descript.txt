@@ -1,0 +1,141 @@
+//--Descript.txt
+
+use_self_alpha,1
+use_input_alpha,1
+overlay_outside_balloon,1
+
+charset,UTF-8
+
+type,balloon
+name,underTRASH
+
+craftman,Era the Outworlder
+craftmanw,Era the Outworlder
+craftmanurl,https://era-the-outworlder.github.io/era_makes_ghosts/
+
+homeurl,https://github.com/Era-the-Outworlder/era_makes_ghosts/tree/main/updates/yaub_under_trash
+
+clickwaitmarker.filename,clickwaitmarker
+clickwaitmarker.x,-130
+clickwaitmarker.y,-20
+
+//-- Defining Text Areas
+
+
+origin.x,0
+origin.y,0
+
+validrect.left,145
+validrect.top,10
+validrect.right,545
+validrect.bottom,160
+
+
+wordwrappoint.x,540
+wordwrappoint.y,0
+
+// kroeger 07_66
+font.name,Determination Mono
+font.height,18
+font.color.r,255
+font.color.g,255
+font.color.b,255
+
+
+
+
+// windowposition.x,100
+// windowposition.y,0
+windowposition.limit,1
+
+//-- Other String
+
+
+font.shadowcolor.r,-1
+font.shadowcolor.g,-1
+font.shadowcolor.b,-1
+
+anchor.font.color.r,255
+anchor.font.color.g,0
+anchor.font.color.b,0
+
+
+
+cursor.blendmethod,none
+cursor.style,underline
+
+
+
+cursor.pen.color.r,255
+cursor.pen.color.g,255
+cursor.pen.color.b,0
+
+
+cursor.brush.color.r,200
+cursor.brush.color.g,200
+cursor.brush.color.b,200
+
+
+cursor.font.color.r,255
+cursor.font.color.g,255
+cursor.font.color.b,0
+
+
+
+
+
+
+//----Up scroll arrow
+arrow0.x,545
+arrow0.y,10
+
+//----Down scroll arrow
+arrow1.x,545
+arrow1.y,145
+
+
+
+onlinemarker.x,10
+onlinemarker.y,150
+
+
+sstpmarker.x,-140
+sstpmarker.y,150
+
+
+
+sstpmessage.font.height,9
+sstpmessage.font.color.r,255
+sstpmessage.font.color.g,255
+sstpmessage.font.color.b,255
+sstpmessage.x,-120
+sstpmessage.y,150
+
+
+
+number.font.name,Determination Sans
+number.font.height,10
+number.font.color.r,255
+number.font.color.g,255
+number.font.color.b,255
+number.xr,300
+number.y,150
+
+
+
+
+//-- Communication/Input Boxes
+
+
+communicatebox.x,11
+communicatebox.y,25
+
+
+communicatebox.width,333
+communicatebox.height,26
+
+communicatebox.font.name,Determination Mono
+
+communicatebox.font.color.r,255
+communicatebox.font.color.g,255
+communicatebox.font.color.b,255

@@ -1,0 +1,24 @@
+//--Balloonk4s.txt
+
+clickwaitmarker.filename,clickwaitmarker2
+clickwaitmarker.x,-165
+clickwaitmarker.y,-14
+
+use_self_alpha,1
+
+origin.x,0
+origin.y,0
+
+validrect.left,15
+validrect.top,15
+validrect.right,260
+validrect.bottom,125
+
+wordwrappoint.x,260
+wordwrappoint.y,125
+
+font.name,Determination Mono
+font.height,15
+font.color.r,0
+font.color.g,0
+font.color.b,0
