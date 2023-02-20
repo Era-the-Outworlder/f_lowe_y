@@ -1,0 +1,136 @@
+//  ######                                                   
+//  #     # #####   ####  #    #  ####  #    # #    #  ####  
+//  #     # #    # #    # ##   # #    # #    # ##   # #      
+//  ######  #    # #    # # #  # #    # #    # # #  #  ####  
+//  #       #####  #    # #  # # #    # #    # #  # #      # 
+//  #       #   #  #    # #   ## #    # #    # #   ## #    # 
+//  #       #    #  ####  #    #  ####   ####  #    #  ####  
+
+//-------- OnTeachPronouns --------
+// This is called from either OnFirstBoot or the User Config menu to set/change the user's pronouns
+
+OnTeachPronouns
+{
+	"\t\c\b2\0\s[3]%(Flowey) * Do. %(d_)o. %(d_)%(o_).... Pronouns?"
+	
+	"\t\c\b2\0\s[3]%(Narrator) * You are offered a choice of pronouns."
+	--
+	"\_w[500]\n[250]\_q/
+	\![*] \q[He-Him-His,OnSetPronouns,1]\n/
+	\![*] \q[She-Her-Her,OnSetPronouns,2]\n/	
+	\![*] \q[They-Them-Their,OnSetPronouns,3]\n/
+	\![*] \q[Something else...,OnTeachCustomPronoun]\0\s[0]"
+}	
+
+OnSetPronouns
+{
+	if reference[0] == 1
+	{
+		nomPro = "he"
+		oblPro = "him"
+		posPro = "his"
+	}
+	elseif reference[0] == 2
+	{
+		
+		nomPro = "she"
+		oblPro = "her"
+		posPro = "her"
+	}
+	elseif reference[0] == 3
+	{
+		
+		nomPro = "they"
+		oblPro = "them"
+		posPro = "their"
+	}
+	elseif reference[0] == 0
+	{
+		nomPro = reference[1]
+		oblPro = reference[2]
+		posPro = reference[3]
+	}
+	--
+	
+	if firstBoot == 1
+	{
+		"\0\s[3]%(Narrator) * You say that your pronouns are %(nomPro), %(oblPro), and %(posPro).\n[150] f_lowe_y will now call you by these pronouns.\n[150] You can always change this from f_low_ey's User Configuration Menu.\_w[500]\_s\b[-1]\c\_s"
+		--
+		"\![timerraise,1000,1,OnGetBirthday]"	
+	}
+	elseif firstBoot == 2
+	{
+		"\0\s[3]%(Narrator) * You say that your pronouns are %(nomPro), %(oblPro), and %(posPro).\n[150] f_lowe_y will now call you by these pronouns.\n[150] You can always change this from f_low_ey's User Configuration Menu.\_w[500]\_s\b[-1]\c\_s"
+		--
+		"\![timerraise,1000,1,OnGetBirthday]"	
+	}
+	else
+	{
+		"\0\s[3]%(Narrator) * Your pronouns are %(nomPro), %(oblPro), and %(posPro).\n[150] f_lowe_y will now call you by these pronouns.\n[150] You can always change this again later.\e"
+	}
+
+}
+
+
+OnTeachCustomPronoun
+{
+	"\0\s[3]%(Narrator) * Enter your nominative pronoun, ex.'they'\![open,inputbox,OnNominativeTeach,-1]"
+}
+
+//---- Teaching each pronoun ----
+
+OnNominativeTeach
+{
+	_nounN = reference[0] //this stores the pronoun value temporarily in reference[0]
+
+	_check = REPLACE(reference[0]," ","")
+	if _check  == "" // This is if the user doesn't enter any text
+	{
+		"\0\s[21]%(Narrator) * You didn't type anything into the box. Whoops! \![open,inputbox,OnNominativeTeach,]"
+	}
+	else //Continuing on
+	{
+		"\0\s[3]%(Narrator) * Enter your oblique pronoun, ex.'them'\![open,inputbox,OnObliqueTeach,--reference=%_nounN]"
+	}
+}
+
+
+OnObliqueTeach
+{
+	_nounO = reference[0] //this stores the pronoun value temporarily in reference[0]
+	_nounN = reference[2]
+	_check = REPLACE(reference[0]," ","")
+	if _check  == "" // This is if the user doesn't enter any text
+	{
+		"\0\s[18]%(Narrator) * You didn't type anything into the box. Whoops!\![open,inputbox,OnObliqueTeach,--reference=%_nounN]"
+	}
+	else //Continuing on
+	{
+		"\0\s[3]%(Narrator) * Enter your possessive pronoun, ex.'their'\![open,inputbox,OnPossessiveTeach,--reference=%_nounN,--reference=%_nounO]"
+	}
+}
+
+
+OnPossessiveTeach
+{
+
+	_nounP = reference[0] //this stores the pronoun value temporarily in reference[0]
+	_nounO = reference[3]
+	_nounN = reference[2]
+	_check = REPLACE(reference[0]," ","")
+	if _check  == "" // This is if the user doesn't enter any text
+	{
+		"\0\s[18]%(Narrator) * You didn't type anything into the box. Whoops!\![open,inputbox,OnPossessiveTeach,--reference=%_nounN,--reference=%_nounO]"
+	}
+	else //Continuing on
+	{
+		"\0\s[3]%(Narrator) * You entered %(_nounN), %(_nounO), and %(_nounP).\n * Does that seem right? \_w[500]\n[150]\_q/
+		\![*]\q[Looks good!,OnSetPronouns,0,%_nounN,%_nounO,%_nounP]\n/
+		\![*]\q[Let's try that again...,OnTeachCustomPronoun]"
+			
+	}
+}
+	
+
+
+

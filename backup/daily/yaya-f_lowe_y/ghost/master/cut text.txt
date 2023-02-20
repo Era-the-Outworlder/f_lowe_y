@@ -1,0 +1,151 @@
+// "\0\s[14]%(Narrator) * (Something seems to be wrong.) \_w[500]"
+		
+			// "\0\s[15]%(Flowey) * What?! No. \_w[500]"
+			
+			
+		
+			// --------
+			
+			"\0\s[24]%(Flowey) * HAHAHAHAHAHAHAHA"
+		
+			"\0\s[26]\i[0]%(Flowey)\f[align,center]EVERYONE"
+			
+			{
+				_EV = OnGLITCH("EVERYONE")
+				"\0\s[26]\i[1]%(Flowey)\f[align,center]%(_EV)"
+			}
+			
+			// "\0\s[27]%(Narrator) * Swing and miss. "
+			
+			// "\0\s[27]%(Flowey)"
+			
+			// "\0\s[28]%(Narrator)"
+
+			// "\0\s[29]\_v[mus\intermission.wav]"
+			
+			
+			if hour == timerStart[0] && minute == timerStart[1]
+		{
+			"\![embed,OnDRPSet,%(userStatus[1])]"
+		}
+		elseif hour == timerEnd[0] && minute == timerEnd[1]
+		{
+			"\![embed,OnDRPSet,%(userStatus[2])]"
+		}
+			
+timerStartDisplay
+{
+	_temhr = "%(timerStart[0])"
+	_temmn = "%(timerStart[1])"
+	if _temhr == 0
+	{	
+		_display = "12:"
+	}
+	else
+	{
+		_display = _temhr
+	}
+	--
+	_display = ("%(_display):%(_temmn)")
+	
+	--
+	"%(_display)"
+}
+
+timerEndDisplay
+{
+	_tem = timerEnd[0]
+	if _tem > 12
+	{_display = (_tem - 12)}
+	elseif _tem < 12 && _tem > 0
+	{_display = _tem}
+	else
+	{_display = 12}
+	--
+	"%(_display)"
+}
+
+OnAwayTimer
+{
+	case reference[2]
+	{
+		when "setStart"
+		{
+			timerStart = SPLIT(reference[0],",")
+			--
+			"%(timerStart[0])/%(timerStart[1])"
+		}
+		when "setEnd"
+		{
+			timerEnd = SPLIT(reference[0],",")
+		}
+	
+	}
+	--
+	case reference[0]
+	{
+		when "changeStatus"
+		{
+		
+		}
+		when "menu"
+		{
+			"\1\b2Scheduled Status\n[200]"
+			--
+			if !timerStart && !timerEnd
+			{
+				'\![*] \q[Set Away Start Time,"script:\![open,timeinput,OnAwayTimer,,%(hour),%(minute),00,--reference=setStart]"]\n'
+				--
+				'\![*] \q[Set Away End Time,"script:\![open,timeinput,OnAwayTimer,,%(hour),%(minute),0,--reference=setEnd]"]\n'
+			}
+			elseif timerStart && !timerEnd
+			{
+				"Away Start Time: %(timerStartDisplay)\n"
+				--
+				'\![*] \q[Change,"script:\![open,timeinput,OnAwayTimer,,%(hour),%(minute),00,--reference=setStart]"]\n'
+				--
+				'\![*] \q[Set Away End Time,"script:\![open,timeinput,OnAwayTimer,,%(hour),%(minute),0,--reference=setEnd]"]\n'
+			}
+			elseif !timerStart && timerEnd
+			{
+				'\![*] \q[Set Away Start Time,"script:\![open,timeinput,OnAwayTimer,,%(hour),%(minute),00,--reference=setStart]"]\n'
+				--
+				"Away End Time: %(timerEndDisplay)\n"
+				'\![*] \q[Change,"script:\![open,timeinput,OnAwayTimer,,%(hour),%(minute),00,--reference=setEnd]"]\n'
+			}
+			else
+			{
+				"Away Start Time: %(timerStartDisplay)\n"
+				--
+				'\![*] \q[Change,"script:\![open,timeinput,OnAwayTimer,,%(hour),%(minute),00,--reference=setStart]"]\n'
+				--
+				"Away End Time: %(timerEndDisplay)\n"
+				'\![*] \q[Change,"script:\![open,timeinput,OnAwayTimer,,%(hour),%(minute),00,--reference=setEnd]"]\n'
+			}
+		}
+		--
+		
+	}
+	
+}
+
+--
+	"\f[height,-1]AWAY HOURS:\f[height,default]\n%(timerStartDisplay) to %(timerEndDisplay) \n/
+	\f[height,-3]Current status: %(userStatus) \![*](\q[%(change)?,OnAwayTimer,menu])\f[height,default]\n[150]"
+
+
+// Program Commentary
+	if canDesktopEye == "ON"
+	{
+		OnDesktopEyeball
+	}
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,19 @@
-*/profile
-*.bak
-*.psd
-*.mdp
-*.log
-*log.txt
+# exclude logs
+**/*.log
+
+**/ssp_shiori_log.txt
+**/yaya_variable.cfg
+
+# exclude .bak files EXCEPT in backups
+**/*.bak
+!backup/**/*.bak
+
+# exclude raw art files. not included in /backup/ because they are usually too large to commit anyway
+**/*.psd
+**/*.mdp
+
+# exclude user-specific information outside of backup
+update/**/profile/**
+update/**/yaya_variable.cfg
+release/**/profile/**
+release/**/yaya_variable.cfg

@@ -1,0 +1,10 @@
+Charset,UTF-8
+install,691361255
+homeurl_found,1
+surfacecount,95
+homeurl,https://raw.githubusercontent.com/Era-The-Outworlder/era_makes_ghosts/main/Updates/f_lowe_y/
+update_result,OK(6)
+firstboot,691361255
+update_time,704854288
+commitmemorysize,4632277
+lastboot,727348335

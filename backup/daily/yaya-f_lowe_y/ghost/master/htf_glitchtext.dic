@@ -1,0 +1,267 @@
+
+//     ▄██████▄   ▄█        ▄█      ███      ▄████████    ▄█    █▄    
+//    ███    ███ ███       ███  ▀█████████▄ ███    ███   ███    ███   
+//    ███    █▀  ███       ███▌    ▀███▀▀██ ███    █▀    ███    ███   
+//   ▄███        ███       ███▌     ███   ▀ ███         ▄███▄▄▄▄███▄▄ 
+//  ▀▀███ ████▄  ███       ███▌     ███     ███        ▀▀███▀▀▀▀███▀  
+//    ███    ███ ███       ███      ███     ███    █▄    ███    ███   
+//    ███    ███ ███▌    ▄ ███      ███     ███    ███   ███    ███   
+//    ████████▀  █████▄▄██ █▀      ▄████▀   ████████▀    ███    █▀    
+//               ▀                                                    
+
+// THIS THING IS A MESSSSSSS. But I love it.
+			
+			// \![embed,OnGLITCH,happy]
+			// \![embed,OnGlitchMidi,happy]
+			// \![embed,OnGlitchLite,happy]
+
+// accepts either argument or reference, separates strings into characters, sends to glitch converter.
+OnGLITCH 
+{
+	_text = ""
+	_final = ""
+	if !_argv
+	{
+		_text = TOLOWER(reference[0])
+	}
+	else
+	{
+		_text = TOLOWER(_argv[0])
+	}
+	_send = CHARSPLIT(_text)
+	_final = OnGlitchReplace(_send)
+	--
+	_final;
+}
+
+// as above but sends to OnGlitchMidi converter
+
+OnGlitchMidi	
+{
+	_text = ""
+	if reference[0]
+	{
+		_text = TOLOWER(reference[0])
+	}
+	else
+	{
+		_text = TOLOWER(_argv[0])
+	}
+	_send = CHARSPLIT(_text)
+	_final = OnGMidiReplace(_send)
+	--
+	_final;
+}
+
+// as above but sends to OnGlitchLite converter
+
+OnGlitchLite	
+{
+	_text = ""
+	if reference[0]
+	{
+		_text = TOLOWER(reference[0])
+	}
+	else
+	{
+		_text = TOLOWER(_argv[0])
+	}
+	_send = CHARSPLIT(_text)
+	_final = OnGliteReplace(_send)
+	--
+	_final;
+}
+
+
+
+//USE:
+//CHARSPLIT('word') will return 'w,o,r,d'
+CHARSPLIT
+{
+    _char = IARRAY //declare an array
+    _strlen = STRLEN(_argv[0]) //get how many letters the word has
+    for _i=0;_i<_strlen;_i++
+    {
+        _char[_i] = SUBSTR(_argv[0],_i,1)//get the [_i] letter from the word and save it into an array
+    }
+    --
+    _char; //display the array
+}
+
+alpha
+{"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"}
+
+// Replaces each character sent to it with its corrosponding glitch. only changes alpha characters
+// 30% chance of case setting. then 20% += "_"
+// remaining 70% of cases: 10% = "." 40% = "-", 50% = "_"
+
+OnGlitchReplace
+{
+	_array = IARRAY
+	_array = _argv[0]
+	_display = ""
+	_num = 0
+	foreach _array; _char //Each time the loop runs, _char will store the next value in the array, until the array ends
+	{	
+		// LOGGING("iteration %(_num + 1)")
+		if _char _in_ alpha
+		{
+			// LOGGING("_char _in_ alpha")
+			--
+			if RAND(100) >= 29
+			{
+				// LOGGING("rand GREATER than 29%")
+				--
+				_caseSet = RAND(100)
+				if _caseSet <= 49
+				{
+					// LOGGING("c == %(CHR(34))%(_char)%(CHR(34)) TOUPPER")
+					_char = TOUPPER(_char)
+				}
+				elseif _caseSet >= 50
+				{
+					// LOGGING("char == %(CHR(34))%(_char)%(CHR(34)) TOLOWER")
+					_char = TOLOWER(_char)
+				}
+				
+				--
+				
+				if RAND(100) <= 19
+				{
+					// LOGGING("ADD UNDERSCORE")
+					_char += "_"
+				}
+				else{LOGGING("DO NOTHING")}
+			}
+			else
+			{
+				// LOGGING("rand LESS than 29%")
+				--
+				_punctuationSet = RAND(100)
+				if _punctuationSet <= 9
+				{
+					// LOGGING("char == %(CHR(34))%(_char)%(CHR(34)) REPLACE PERIOD")
+					_char = "."
+				}
+				elseif _punctuationSet >= 50
+				{
+					// LOGGING("char == %(CHR(34))%(_char)%(CHR(34)) REPLACE UNDERSCORE")
+					_char = "_"
+				}
+				else
+				{
+					// LOGGING("char == %(CHR(34))%(_char)%(CHR(34)) REPLACE HYPHEN")
+					_char = "-"
+				}
+					
+			}
+		}
+		else
+		{
+			LOGGING("OutOfBounds char == %(CHR(34))%(_char)%(CHR(34))")
+		}
+		--
+		_display += "%(_char)"
+		// {LOGGING("_display == %(CHR(34))%(_display)%(CHR(34)) AND _NUM == %(_num)")}
+		_num ++
+		
+	}
+	--
+	// LOGGING("display == %(_display)")
+	_display
+
+}
+
+// 50% TOUPPER, otherwise TOLOWER. then 60% chance to += "_", " ", "-" (20% each, exclusive)
+OnGMidiReplace
+{
+	_array = IARRAY
+	_array = _argv[0]
+	_display = ""
+	_num = 0
+	foreach _array; _char
+	{
+		if _char _in_ alpha
+		{
+			_caseCENT = RAND(100)
+			_additionCENT = RAND(100)
+			if _caseCENT >= 49 {_char = TOUPPER(_char)}
+			else {_char = TOLOWER(_char)}
+			--
+			if _additionCENT <= 19 {_char += "_"}
+			elseif _additionCENT <= 39 {_char += " "}
+			elseif _additionCENT <= 59 {_char += "-"}
+			else{}
+		}
+		else
+		{}
+		--
+		_display += "%(_char)"
+		_num ++
+	}
+	--
+	_display
+}
+
+
+// "randomly" turns letters upper or lowercase, 15% += underscore
+OnGliteReplace 
+{
+	_array = IARRAY
+	_array = _argv[0]
+	_display = ""
+	_num = 0
+	foreach _array; _char
+	{
+		if RAND(100) >= 49 {_char = TOUPPER(_char)}
+		else {_char = TOLOWER(_char)}
+		--
+		if _char _in_ alpha && RAND(100) <= 14 {_char += "_"}
+		else{}
+		--
+		_display += "%(_char)"
+		_num ++
+	}
+	--
+	_display
+}
+
+//;"a̟ͦ";"b̳͑";"c̙̚";"d͉̀";"ȇ̹͉";"f̩͗̏";"g̘͕̅"
+//Letter glitch substitution
+
+a_{if RAND(100)>=39{"a";"A";"a_";"A_"};else{"_";"-";"."}}
+b_{if RAND(100)>=39{"b";"B";"b_";"B_"};else{"_";"-";"."}}
+c_{if RAND(100)>=39{"c";"C";"c_";"C_"};else{"_";"-";"."}}
+d_{if RAND(100)>=39{"d";"D";"d_";"D_"};else{"_";"-";"."}}
+e_{if RAND(100)>=39{"e";"E";"e_";"E_"};else{"_";"-";"."}}
+f_{if RAND(100)>=39{"f";"F";"f_";"F_"};else{"_";"-";"."}}
+g_{if RAND(100)>=39{"g";"G";"g_";"G_"};else{"_";"-";"."}}
+h_{if RAND(100)>=39{"h";"H";"h_";"H_"};else{"_";"-";"."}}
+i_{if RAND(100)>=39{"i";"I";"i_";"I_"};else{"_";"-";"."}}
+j_{if RAND(100)>=39{"j";"J";"j_";"J_"};else{"_";"-";"."}}
+k_{if RAND(100)>=39{"k";"K";"k_";"K_"};else{"_";"-";"."}}
+l_{if RAND(100)>=39{"l";"L";"l_";"L_"};else{"_";"-";"."}}
+m_{if RAND(100)>=39{"m";"M";"m_";"M_"};else{"_";"-";"."}}
+n_{if RAND(100)>=39{"n";"N";"n_";"N_"};else{"_";"-";"."}}
+o_{if RAND(100)>=39{"o";"O";"o_";"O_"};else{"_";"-";"."}}
+p_{if RAND(100)>=39{"p";"P";"p_";"P_"};else{"_";"-";"."}}
+q_{if RAND(100)>=39{"q";"Q";"q_";"Q_"};else{"_";"-";"."}}
+r_{if RAND(100)>=39{"r";"R";"r_";"R_"};else{"_";"-";"."}}
+s_{if RAND(100)>=39{"s";"S";"s_";"S_"};else{"_";"-";"."}}
+t_{if RAND(100)>=39{"t";"T";"t_";"T_"};else{"_";"-";"."}}
+u_{if RAND(100)>=39{"u";"U";"u_";"U_"};else{"_";"-";"."}}
+v_{if RAND(100)>=39{"v";"V";"v_";"V_"};else{"_";"-";"."}}
+w_{if RAND(100)>=39{"w";"W";"w_";"W_"};else{"_";"-";"."}}
+x_{if RAND(100)>=39{"x";"X";"x_";"X_"};else{"_";"-";"."}}
+y_{if RAND(100)>=39{"y";"Y";"y_";"Y_"};else{"_";"-";"."}}
+z_{if RAND(100)>=39{"z";"Z";"z_";"Z_"};else{"_";"-";"."}}
+
+// splitTest
+// {
+	// _test = TOSTR(_argv[0])
+	// _array = SPLIT(_test,"//",3)
+	
+	// _array;
+// }
+
+

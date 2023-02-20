@@ -1,0 +1,559 @@
+﻿
+//   #####   #####  ######     #     #                      
+//  #     # #     # #     #    ##   ## ###### #    # #    # 
+//  #       #       #     #    # # # # #      ##   # #    # 
+//   #####   #####  ######     #  #  # #####  # #  # #    # 
+//        #       # #          #     # #      #  # # #    # 
+//  #     # #     # #          #     # #      #   ## #    # 
+//   #####   #####  #          #     # ###### #    #  ####  
+
+
+//---- SSP/User Draw Menu Items ----
+
+
+
+On_recommendrootbutton.caption
+{
+	CapGlitch("&Recommendations")
+}
+//---- Top Menu Option ----
+
+
+On_sakura.recommendsites
+{
+	"Ukagaka Webring Hub"
+	--
+	"%ASC(1)https://ukagakawebring.netlify.app/%ASC(2)"
+	--
+	
+	"Ukagaka Dream Team Wiki"
+	--
+	"%ASC(1)https://ukagakadreamteam.com/wiki/home%ASC(2)"
+	--
+	
+	"Zarla's Ghost Template Walkthrough"
+	--
+	"%ASC(1)http://www.ashido.com/ukagaka/walkthrough.html%ASC(2)"
+	--
+	
+	"SSP"
+	--
+	"%ASC(1)http://ssp.shillest.net/%ASC(2)"
+	--
+	
+	"UKADOC (J)"
+	--
+	"%ASC(1)http://ssp.shillest.net/ukadoc/manual/index.html%ASC(2)"
+	--
+	
+	"AYAYA/03 YAYA Information Wiki (J)"
+	--
+	"%ASC(1)http://emily.shillest.net/ayaya/?FrontPage%ASC(2)"
+	--
+	
+	"Disc-2 (J)"
+	--
+	"%ASC(1)http://disc2.s56.xrea.com/%ASC(2)"
+	
+} 
+
+//---- The second option from the top ----
+
+
+On_portalrootbutton.caption
+{
+	// "Crea&tor Sites"
+	CapGlitch("Crea&tor Sites")
+}
+
+//---- Websites in the Second Option ----
+ 
+On_sakura.portalsites
+{
+	"GITHUB"
+	--
+	"%ASC(1)https://era-the-outworlder.github.io/era_makes_ghosts/f_lowe_y.html/ %ASC(2)"
+	--
+ 	"Tumblr"
+	--
+	"%ASC(1)http://theoutworlder.tumblr.com %ASC(2)"
+	--
+	"Twitter"
+	--
+	"%ASC(1) https://twitter.com/theoutworlder %ASC(2)"
+	--	
+	"Deviantart"
+	--
+	"%ASC(1) http://baobhan-sith.deviantart.com %ASC(2)"
+	--
+	"Outworlder Affairs"
+	--
+	"%ASC(1) http://www.outworlderaffairs.com %ASC(2)"
+	
+	
+}
+
+
+//---- Update Menu Caption ------------------
+ 
+On_updatebutton.caption
+{
+	CapGlitch3("Update Ghost")	
+}
+
+//----  Network Update URL  ------
+On_homeurl
+{
+	"https://raw.githubusercontent.com/Era-The-Outworlder/era_makes_ghosts/main/Updates/f_lowe_y/"
+}
+
+
+//---- Uninstall Caption -----------------------------------------------------
+ 
+On_vanishbutton.caption
+{	
+	OnGLITCH("uninstall")
+}
+
+
+//---- Headlines and RSS Feeds ---------------------------------------------------------
+
+On_headlinesenserootbutton.caption
+{
+	CapGlitch("Headlines + RSS")
+}
+
+//---- Plugins ----
+On_pluginrootbutton.caption
+{
+	CapGlitch("&Plugins")	
+}
+
+//---- Check Mail (BIFF) ----
+
+On_biffbutton.caption
+{
+	CapGlitch2("Check &Mail")
+	CapGlitch("Check e&Mail")
+}
+
+//---- Shell Scaling ----
+
+On_shellscalerootbutton.caption
+{
+	CapGlitch2("Sh&ell Scaling")
+}
+
+// Additional Settings (Same as Ghost Preferences) Not Found
+
+On_shellscaleotherbutton.caption
+{
+	CapGlitch("&Other Percentage")
+}
+
+
+//---- Baloon Scaling ----
+
+On_balloonscalerootbutton.caption
+{
+	CapGlitch2("Balloon Scaling (&D)")
+}
+
+On_balloonscaleotherbutton.caption
+{
+	CapGlitch("&Other Percentage")
+}
+
+//-------- Utilities --------
+
+On_utilityrootbutton.caption
+{
+	CapGlitch3("Utilities (&F)")
+}
+
+On_calendarbutton.caption
+{
+	CapGlitch("&Calendar")
+}
+
+On_messengerbutton.caption
+{
+	CapGlitch("SSP &Messenger")
+}
+
+On_sntpbutton.caption
+{
+	CapGlitch("&NTP Time Sync")
+}
+
+On_ghostexplorerbutton.caption
+{
+	CapGlitch3("SSP &Explorer")
+	CapGlitch2("Ghost &Explorer")
+}
+
+On_updateplatformbutton.caption
+{
+	CapGlitch3("Check SSP &Updates")
+}
+
+//Speech Recognition (&T)
+//On_dictationbutton.caption
+
+On_recognitionbutton.caption
+{
+	CapGlitch("Speech Recognition (&T)")
+}
+
+//&Voice Synthesis
+On_texttospeechbutton.caption
+{
+	CapGlitch("&Voice Synthesis")
+}
+
+On_addressbarbutton.caption
+{
+	CapGlitch("&Address Bar")
+}
+
+On_openfilebutton.caption
+{
+	CapGlitch("Open FIle (&I)")
+}
+
+On_openfolderbutton.caption
+{
+	CapGlitch("Open Folder (&F)")
+}
+
+On_scriptlogbutton.caption
+{
+	CapGlitch3("Script &Log")
+}
+
+On_duibutton.caption
+{
+	CapGlitch3("&Development Interface")
+}
+
+On_purgeghostcachebutton.caption
+{
+	CapGlitch("Purge &Ghost Cache")
+}
+
+On_updatefmobutton.caption
+{
+	CapGlitch("&FMO Update")
+}
+
+On_reloadinfobutton.caption
+{
+	CapGlitch("&Reload Extension Folders")
+}
+
+On_switchreloadbutton.caption
+{
+	CapGlitch3("Rel&oad Ghost")
+}
+
+On_leavepassivebutton.caption
+{
+	CapGlitch3("Reset &Passive Mode")
+}
+
+On_switchreloadtempghostbutton.caption
+{
+	CapGlitch("&Keep Temporary Ghost")
+}
+
+On_switchmovetodefaultpositionbutton.caption
+{
+	CapGlitch2("Reset S&hell Position")
+}
+
+On_resetballoonpositionbutton.caption
+{
+	CapGlitch2("Reset Balloo&n Position")
+}
+
+On_closeballoonbutton.caption
+{
+	CapGlitch("Hide All &Balloons")
+}
+
+//-------- Options --------
+
+
+On_configurationrootbutton.caption
+{
+	CapGlitch3("&Options")
+}
+
+On_configurationbutton.caption
+{
+	CapGlitch3("&Preferences...?")
+}
+
+//Ghost Preferences...
+
+
+On_switchproxybutton.caption
+{
+	CapGlitch("Enable Pro&xy")
+}
+
+On_charsetbutton.caption
+{
+	CapGlitch("Set Default &Charset")
+}
+
+
+
+On_switchtalkghostbutton.caption
+{
+	CapGlitch("Raise AITalk from &SHIORI")
+}
+
+On_switchcompatiblemodebutton.caption
+{
+	CapGlitch("&Old Specification Support")
+}
+
+
+On_ghostrootbutton.caption
+{
+	CapGlitch2("Change Ghost")
+}
+ 
+ 
+On_callghostrootbutton.caption
+{
+	CapGlitch2("Call Ghost")
+}
+
+
+On_shellrootbutton.caption
+{
+	CapGlitch2("Change Shell")
+}
+
+
+On_dressuprootbutton.caption
+{
+	CapGlitch("&Clothes/Dress Up")
+}
+
+On_balloonrootbutton.caption
+{
+	CapGlitch2("&Balloon")
+}
+
+
+//----History-----------------
+
+On_historyrootbutton.caption
+{
+	CapGlitch3("History (&Y)")
+}
+
+On_ghosthistorybutton.caption
+{
+	CapGlitch2("Changed &Ghosts")
+}
+
+On_callghosthistorybutton.caption
+{
+	CapGlitch2("Called Ghosts (&Z)")
+}
+
+On_balloonhistorybutton.caption
+{
+	CapGlitch2("&Balloon")
+}
+
+On_headlinesensehistorybutton.caption
+{
+	CapGlitch("&Headline")
+}
+
+On_pluginhistorybutton.caption
+{
+	CapGlitch("&Plugin")
+}
+
+
+
+
+//---- Information ----
+
+On_inforootbutton.caption
+{
+	CapGlitch3("Inform&ation")
+}
+
+On_firststaffbutton.caption
+{
+	CapGlitch("&About SSP")
+}
+
+On_readmebutton.caption
+{
+	CapGlitch3("READ ME")
+	CapGlitch3("readme.txt")
+}
+
+//"Terms of This Ghost" caption cannot be found
+
+On_helpbutton.caption
+{
+	CapGlitch2("&Help")
+}
+
+On_aistatebutton.caption
+{
+	CapGlitch("&AI Graph")
+}
+
+On_rateofusebutton.caption
+{
+	CapGlitch("Ghost Usage Statistics(&R)")
+}
+
+On_systeminfobutton.caption
+{
+	CapGlitch("Output &System Information")
+}
+
+//Language caption cannot be changed
+
+On_hidebutton.caption
+{
+	CapGlitch3("&Minimise")
+}
+
+On_closebutton.caption
+{
+	CapGlitch3("Close (&W)")
+}
+
+On_quitbutton.caption
+{
+	CapGlitch3("Quit")
+}
+
+ 
+//---- Top Menu Option in the Second Character ----
+
+
+On_kero.recommendbuttoncaption
+{
+	CapGlitch("Recommended Sites")
+	
+}
+
+//---- Top Menu Websites for the Second Character ----
+
+ 
+On_kero.recommendsites
+{
+	"A Site"
+	--
+	"%ASC(1)http://www.asite.com/%ASC(2)"
+	--
+	"Another Site"
+	--
+	"%ASC(1)http://anothersite.org/%ASC(2)"
+}
+
+//TESTING
+
+On_kero.testbuttoncaption
+{
+	CapGlitch("Testing")
+	
+}
+
+
+//---- 3+ Character ----
+
+On_char3.recommendsitescaption
+{
+	CapGlitch("Recommended Sites")
+	
+}
+
+On_char3.recommendsites
+{
+	"Nothing"
+}
+
+//---- Caption Glitch Control ----
+
+CapGlitch
+{
+	_cap = _argv[0]
+	
+	if (ellVee <= 0) || (ellVee !=1 && eraDebug == "ON" && username == "BugTest")
+	{
+		"%(_cap)"
+	}
+	elseif ellVee >=20 
+	{_cap = OnGLITCH("help");"%(_cap)"}
+	elseif ellVee >=13 
+	{_cap = OnGLITCH("%(_cap)");"%(_cap)"}
+	elseif ellVee >= 7
+	{_cap = OnGlitchMidi("%(_cap)");"%(_cap)"}
+	elseif ellVee >=2
+	{_cap = OnGlitchLite("%(_cap)");"%(_cap)"}
+	else
+	{"%(_cap)"}
+}	
+
+CapGlitch2
+{
+	_cap = _argv[0]
+	
+	if (ellVee <= 0) || (ellVee !=1 && eraDebug == "ON" && username == "BugTest")
+	{
+		"%(_cap)"
+	}
+	elseif ellVee >=20 
+	{_cap = OnGLITCH("help");"%(_cap)"}
+	elseif ellVee >= 16
+	{_cap = OnGLITCH("%(_cap)");"%(_cap)"}
+	elseif ellVee >=11
+	{_cap = OnGlitchMidi("%(_cap)");"%(_cap)"}
+	elseif ellVee >=5
+	{_cap = OnGlitchLite("%(_cap)");"%(_cap)"}
+	else
+	{"%(_cap)"}
+}
+
+CapGlitch3
+{
+	_cap = _argv[0]
+	
+	if (ellVee <= 0) || (ellVee !=1 && eraDebug == "ON" && username == "BugTest")
+	{
+		"%(_cap)"
+	}
+	elseif ellVee >=3
+	{_cap = OnGlitchLite("%(_cap)");"%(_cap)"}
+	else
+	{"%(_cap)"}
+}	
+
+//---- Uninstall Options visibility On/Off ----
+On_vanishbutton.visible
+{
+ 	if deleteshitai == "ON"
+ 	{
+		"1"
+	}
+	else
+	{
+		"0"
+	}
+}
+
+

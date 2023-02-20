@@ -1,0 +1,52 @@
+charset,UTF-8
+version,1
+option,DisableNoDefineSurfaces
+
+group,__disabled
+{
+10,Null-Kero
+19,Null-Kero Sing
+}
+
+group,F
+{
+scope,0
+0,Default w/Animations
+1,Blank Base
+2,Blank Base 2
+3,Default Static
+
+4,Look Left
+5,Look Right
+6,Closed Mouth
+7,CM Look Left
+8,CM Look Right
+9,Closed Eyes
+
+11,Embarrassed
+12,Surprised
+13,Anxious
+14,Discouraged
+15,Shocked
+16,Scary
+17,Angry
+18,Cross
+
+20,Null Signboard
+
+21,Annoyed
+22,Crying
+23,Toothy Smile
+24,Laughing
+
+25,Singing
+
+26,EVERYONE
+27,MISS
+28,Wink
+29,Skull
+
+30,Toriel
+
+
+}

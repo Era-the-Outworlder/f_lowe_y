@@ -1,0 +1,62 @@
+
+//   CCCCC  hh                                        LL                     
+//  CC    C hh        aa aa nn nnn   gggggg   eee     LL       oooo   gggggg 
+//  CC      hhhhhh   aa aaa nnn  nn gg   gg ee   e    LL      oo  oo gg   gg 
+//  CC    C hh   hh aa  aaa nn   nn ggggggg eeeee     LL      oo  oo ggggggg 
+//   CCCCC  hh   hh  aaa aa nn   nn      gg  eeeee    LLLLLLL  oooo       gg 
+//                                   ggggg                            ggggg  
+
+// I want a built-in changelog in SSP someday.
+
+OnGhostVer
+{
+	"2.0.0"
+}
+
+OnChangeLog
+{
+	"\![set,autoscroll,disable]\_q\b6\_l[90]\n/
+	
+	--Version 2.0.0--\n[200]/
+	-Add Network Update.\n/
+	-Significant Changes to Dialogues.\n/
+	-Addition of LV system and stat menu.\n/
+	-New/Modified basic functions\n/
+	--Communication with other ghosts\n/
+	--Will notice other ghosts saying his name\n/
+	--\n/
+	-Change of dictionary names\n/
+	-Discord Rich Presence Plugin integration\n/
+	-Emergency Boot Mode\n/
+	-Shell changes:\n/
+	---Update to new seriko definition.\n/
+	---Reorganise/reorder surfaces.\n/
+	---Additional surfaces and new animations.\n/
+	---Change to self-alpha transparency.\n/
+	---Not compatible with old versions.\n/
+	
+	\n[200]/
+	
+	--Version 1.5.0--\n[200]/
+	
+	-Development resumes late 2021. Not released publicly.\n/
+	-Changed from AYA shiori to YAYA.\n/
+	-Rename default shell to %(CHR(34))master%(CHR(34)) to match system defaults.\n/
+	-Rename dictionaries\n/
+	-Add Changelog\n/
+	-Add Silent Mode. As a result, the 'quiet' version will not be updating.\n/
+	
+	\n[200]/
+	
+	--Version 1.0.0--\n[200]/
+	-Initial release\n[200]"
+	
+	--
+	if reference[0] == "menu" //Checks to see if the user came here from the functions menu
+	{
+		"\![*]\q[Done,]\n\![*]\q[Back to Functions,OnFunctionMenu]\e"
+	}
+	elseif reference[0] == "update"
+	{"\n\![*]\q[Close,]\e"}
+	
+}

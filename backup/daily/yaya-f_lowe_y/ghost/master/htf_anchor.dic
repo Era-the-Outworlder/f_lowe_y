@@ -1,0 +1,75 @@
+
+//   _______  _        _______           _______  _______  _______ 
+//  (  ___  )( (    /|(  ____ \|\     /|(  ___  )(  ____ )(  ____ \
+//  | (   ) ||  \  ( || (    \/| )   ( || (   ) || (    )|| (    \/
+//  | (___) ||   \ | || |      | (___) || |   | || (____)|| (_____ 
+//  |  ___  || (\ \) || |      |  ___  || |   | ||     __)(_____  )
+//  | (   ) || | \   || |      | (   ) || |   | || (\ (         ) |
+//  | )   ( || )  \  || (____/\| )   ( || (___) || ) \ \__/\____) |
+//  |/     \||/    )_)(_______/|/     \|(_______)|/   \__/\_______)
+//                                                                 
+
+
+// OnTranslate
+// {
+	// _talk = reference[0]
+	// _talk = REPLACE(_talk, "bugreport(at)outworlderaffairs.com", "\_a[bugmail]bugreport@outworlderaffairs.com\_a")		
+	// if silentMode == "ON"
+	// {
+		// _talk = REPLACE(_talk, "\![sound,play,", "\![sound,stop,")
+		// --
+		// "%(_talk)"
+	// }
+	// else	
+	// {
+		// "%(_talk)"
+	// }	
+// }
+OnTranslate
+{
+    _talk = reference[0]
+    _talk = REPLACE(_talk, "bugreport(at)outworlderaffairs.com","\_a[bugmail]bugreport@outworlderaffairs.com\_a")        
+    if silentMode == "ON"
+    {
+        _talk = REPLACE(_talk, "\![sound,play,", "\![sound,stop,")
+    }
+    
+    if reference1 == "" && reference2 == ""
+    { //send input box : no event (ref2) , no special flag (ref1)
+        EVAL('"' + REPLACE(_talk,'"','" + CHR(0x22) + "') + '"')
+    }
+    else
+    { //event result from ghost
+        TOSTR(_talk)
+    }
+}
+	
+// ---- OnAnchorSelectEx ----
+//\ _a Occurs the moment the link is clicked. reference[0] = Link text. Reference1 = Link ID
+// Reference* = Extended information (second and subsequent arguments in the \ _a tag).
+
+OnAnchorSelectEx
+{
+	if "http://" _in_ reference[0] || "https://" _in_ reference[0] //checking to see if the link is a web address
+	{
+		"\j[%(reference[0])]\e"
+	}
+	else //if it's NOT a web address
+	{
+		case reference1  // Checks against anchor ID
+		{
+			when "bugmail" //if the anchor ID is this value
+			{
+				"\j[mailto:bugreport@outworlderaffairs.com]\e"
+			}
+			when "anchor2" //if the link is this value
+			{
+				""
+			}
+			when "anchor3" //if the link is this value
+			{
+				""
+			}
+		}
+	}
+}

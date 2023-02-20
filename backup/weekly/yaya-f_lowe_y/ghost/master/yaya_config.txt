@@ -1,0 +1,73 @@
+﻿//English translation <3 Era 2021
+
+
+//******************************************************************************
+// SHIORI / 3.0 configuration script for YAYA
+//******************************************************************************
+
+//******************************************************************************
+// AI talk related
+//******************************************************************************
+
+//------------------------------------------------------------------------------
+// TALK_INTERVAL Initial value of AI talk interval [seconds]
+//------------------------------------------------------------------------------
+#globaldefine	TALK_INTERVAL	180
+
+
+//******************************************************************************
+// Installed ghost list construction related
+//******************************************************************************
+
+//------------------------------------------------------------------------------
+//IGLIST_ACCEL
+// If set to 1, NOTIFY installed ghost name will be used to build the installed ghost list during SSP / CROW.
+// The sakura / kero name list is not created, but it is fast. If it is 0, it will be built by file scanning.
+// It takes time if there are many installed ghosts.
+//------------------------------------------------------------------------------
+#globaldefine	SHIORI3FW.IGLIST_ACCEL	1
+
+//------------------------------------------------------------------------------
+//IGLIST_MAX
+// When constructing a ghost list by file scanning, specify the upper limit of the number to be acquired.
+// -1 is unlimited (get all).
+// If it is set to 0, it will not be acquired.
+//------------------------------------------------------------------------------
+#globaldefine	SHIORI3FW.IGLIST_MAX	0
+
+
+//******************************************************************************
+// Request analysis / response construction related
+//******************************************************************************
+
+//------------------------------------------------------------------------------
+//SHIORI3FW.REQUEST_LINES_LIMIT
+// Maximum number of lines to parse the request string.
+// If you reduce it, the startup will be faster, but you may not get the complete installed ghost list.
+// Get all rows at 0.
+//------------------------------------------------------------------------------
+#globaldefine	SHIORI3FW.REQUEST_LINES_LIMIT	0
+
+
+//------------------------------------------------------------------------------
+//SHIORI3FW.RES_REF_MAX
+//	res_reference upper limit
+//------------------------------------------------------------------------------
+#globaldefine	SHIORI3FW.RES_REF_MAX			32
+
+//------------------------------------------------------------------------------
+//SHIORI3FW.AUTO_DATA_CONVERT
+// If it is set to 1, the processing will be the same as AYA5.
+// Automatic type conversion of SAORI return value, etc, processes such as automatically converting \0x01 to a comma are included.
+// If it is set to 0, those processes will not be performed.
+//------------------------------------------------------------------------------
+#globaldefine	SHIORI3FW.AUTO_DATA_CONVERT		1
+
+
+//------------------------------------------------------------------------------
+//SHIORI3FW.REF_ACCEL
+// If set to 1, it will be accessed in the form of reference [0] without creating a variable such as reference0. 
+// A slight speedup can be expected.
+// When set to 0, a variable such as reference0 is created (past compatibility processing).
+//------------------------------------------------------------------------------
+#globaldefine	SHIORI3FW.REF_ACCEL				0

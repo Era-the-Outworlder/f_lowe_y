@@ -1,0 +1,198 @@
+
+//        ___           ___           ___           ___           ___     
+//       /\__\         /\  \         /\  \         /\  \         /\  \    
+//      /:/  /        /::\  \       |::\  \       |::\  \        \:\  \   
+//     /:/  /        /:/\:\  \      |:|:\  \      |:|:\  \        \:\  \  
+//    /:/  /  ___   /:/  \:\  \   __|:|\:\  \   __|:|\:\  \   ___  \:\  \ 
+//   /:/__/  /\__\ /:/__/ \:\__\ /::::|_\:\__\ /::::|_\:\__\ /\  \  \:\__\
+//   \:\  \ /:/  / \:\  \ /:/  / \:\~~\  \/__/ \:\~~\  \/__/ \:\  \ /:/  /
+//    \:\  /:/  /   \:\  /:/  /   \:\  \        \:\  \        \:\  /:/  / 
+//     \:\/:/  /     \:\/:/  /     \:\  \        \:\  \        \:\/:/  /  
+//      \::/  /       \::/  /       \:\__\        \:\__\        \::/  /   
+//       \/__/         \/__/         \/__/         \/__/         \/__/    
+
+
+// I have no idea how to really do this yet, but I've made a start
+
+
+OnCommunicate
+{
+	if reference[0] == "user" || reference[0] == "User"
+ 	{
+ 		ReplyToUser(reference[1])
+	}
+ 	else
+	{
+ 		//---- Respond to comment from other ghost
+		ReplyToGhost
+ 	}
+}
+
+OnStartCommunicate
+{
+	if ghostexcount > 0
+	{
+		
+		responseTimes = 1
+		
+		_num = RAND(ghostexcount)
+		_randghost = "%(ghostexlist[_num])"
+		--
+		//Checks for the Sakura name
+		case _randghost
+		{
+			when "Gaze"
+			{
+				res_reference[0] = "Gaze"
+				gazeTalk ++
+				_gz = OnGLITCH("Gaze")
+				case gazeTalk
+				{
+				when 1-5
+				{"\0\s[21]%(Flowey) * ... You?\_w[500]\nWA%(t_)CH%(e_)R. \_w[500]"}
+				others
+				{"\0\s[18] * S%(e_)%(e_) You.\_w[500]\n%(_gz) \_w[500]"}
+				}
+				
+			}
+			when "Gaster"
+			{
+				res_reference[0] = "Gaster"
+				"Doctor."
+			}
+			when "Temmie"
+			{
+				res_reference[0] = "Temmie"
+				"tem"
+			}
+			when "MiniDev"
+			{
+				res_reference[0] = "MiniDev"
+				"little robot"
+			}
+			when "Sebastian"
+			{
+				res_reference[0] = "Sebastian"
+				"cowboy"
+			}
+			when "RYS-0825"
+			{
+				res_reference[0] = "RYS-0825"
+				"S the Skeleton"
+			}
+			when "Wilson"
+			{
+				res_reference[0] = "Wilson"
+				"constant"
+			}
+			when "Hydrate"
+			{
+				res_reference[0] = "Hydrate"
+				"liquid"
+			}
+			when "Radio Sakura"
+			{
+				res_reference[0] = "Radio Sakura"
+				"Radio"
+			}
+			when "FLUX"
+			{
+				res_reference[0] = "FLUX"
+				"...music..?"
+			}
+			others // greeting all other ghosts
+			{
+				//if res_reference isn't defined, the other ghost won't respond.
+				
+				res_reference[0] = _randghost
+				
+				"%(res_reference[0]).\_w[500]\e"
+			}
+		}
+		
+	}
+	else //If no ghosts are open.
+	{
+		"\s[11]%(Narrator) (Noone's there.)\e"
+		"\s[11]%(Narrator) (But nobody came.)\e"
+		"\s[11]%(Narrator) (He's here alone.)\e"
+
+		"\s[11]%(Flowey) * Alone.\e"
+		"\s[11]%(Flowey) * Alone. Alone. Alone. Al%(o_)ne. Al%(o_)n%(e_). A%(l_)%(o_)n%(e_). A%(l_)%(o_)%(n_)%(e_). %(a_)%(l_)%(o_)%(n_)%(e_).\e"
+	}
+}
+
+//----ReplyToGhost----
+
+//reference[0] is the name of the ghost being communicated with. reference[1] is their output string. res_reference[0] is the ghost that will respond (if a response is available)
+ReplyToGhost
+{
+	if responseTimes < 2
+	{
+		responseTimes++
+		_speaker = TOLOWER(reference[0]) //changes it to lowercase
+		_glSpeaker = OnGLITCH(reference[0])
+		if "gaze" _in_ _speaker
+		{
+			gazeTalk++
+			res_reference[0] = reference[0]
+			
+			"\0\s[3]%(Flowey) * You-you-you-you-you-\n[500]     me?\e"
+			
+			"\0\s[3]%(Narrator) * Even a broken mirror would show a more comforting sight.\e"
+		}
+		elseif "spamton" _in_ _speaker
+		{	
+			
+			res_reference[0] = reference[0]
+			
+			"\0\s[23]%(Spamton) * HAEAHAEAHAEAHAEA !\e"
+			
+			"\0\s[16]\1\s[-1]%(GarbageNoise) * The flower produces a stream of garbage noise.\e"
+			
+			{_hey = OnGlitchLite("HEY EVERY       ! IT'S");"\0\s[23]%(Flowey)%(_hey)%(_glSpeaker)\e"}
+		}
+		elseif "gaster" _in_ _speaker
+		{	
+			
+			res_reference[0] = reference[0]
+			if "teeheegooglied" _in_ reference[1]
+			nonoverlap : {
+				// _googlymoogly = OnGlitchLite("Dr. W.D. Gaster")
+				"%(floweyLaugh)"
+				
+				"\0\s[3]%(Narrator) * The Great \![embed,OnGlitchLite,Dr. W.D. Gaster]."
+			}
+			else
+			{	
+				"\0\s[18]%(Flowey) * You-you-you-you-you-\n[300]\_w[1500]\s[21]   \f[bold,true]\f[height,20]DOCTOR\f[bold,false]\f[height,default]\n[300]\e"
+			
+				"\0\s[3]%(Narrator)\f[height,20]\f[name,Wingdings] * THESE TWO\n\_w[1000]           THINGS\n/
+				\_w[1000]SHOULD NEVER HAVE BEEN\_w[1000]\n      IN THE SAME PLACE.\f[default]\e"
+			}
+		}
+		else
+		{	
+			res_reference[0] = reference[0]
+			"\0\s[3]%(Flowey) * '%(_glSpeaker)'.\_w[500]\0\s[3]YOU.\e"
+		
+			"\0\s[3]%(Flowey) * wait Wait wa i t, '%(_glSpeaker)'. no\e"
+		}
+	}
+	else
+	{
+		responseTimes = 0
+		""
+	}
+	
+}
+
+// ----ReplyToUser----
+// New experimental communication feature! Currently does nothing!
+
+ReplyToUser
+{
+	_test = TOSTR(_argv[0])
+	"Test start:%(_test):test end\n[200]%(refTest)"
+
+}

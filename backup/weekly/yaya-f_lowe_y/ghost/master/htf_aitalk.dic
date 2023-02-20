@@ -1,0 +1,562 @@
+﻿// -------- AI Talk --------
+//This is where all their random conversations are stored.
+
+// ---- AiTalk ----
+
+AiTalk
+{
+	if RAND(100) < (communicateratio - 1)
+ 	{
+ 		OnStartCommunicate
+	}
+ 	else
+	{
+ 		if mikireflag == 0
+		{
+			if CHAIN.IDName == "" 
+			{
+ 				lastTalk = RandomTalk
+			}
+			else 
+			{
+				lastTalk = ChainTalk
+			}
+			lastTalk
+		}
+ 		else
+		{ 
+			MikireTalk
+ 		}
+	}
+}
+
+
+//--RandomTalk 
+
+//--Rules (By Quonit)
+
+// You can change the size of text using \f[height,(number, or the word default).
+ // \f[strike,true] makes the words struck out.
+ // \f[strike,defualt] resets the text to defualt.
+ // \f[sub,true] makes text subscript.
+ // \f[sub,default] resets text to normal.
+ // \f[sup,true] makes text superscript.
+ // \f[sup,false] makes the text normal again.
+ // \f[underline,true] underlines text.
+ // \f[underline,default] removes the line from under the text.
+ // \f[bold,true] makes your statement bold.
+ // \f[bold,false] makes the text not so bold.
+ // \f[italic,true] makes text slanted.
+ // \f[italic,false] de-slants the text.
+ // \f[color0-255,0-255,0-255] changes the color of the text.
+ // \f[color,default] will return the color to default.
+ // \f[default] returns everything back to normal.
+ // \_a[[http://www.website.com/](put text here)\_a can link a website in dialogue.
+ // \0\s[*]\1\s[*]\_s(put dialogue here) has characters say dialogue at the same time.
+
+ 
+
+
+
+RandomTalk : nonoverlap_pool
+{	
+	OnCalcMood
+	--
+	// -------- All Non-LV Conditionals --------
+
+	if ASEARCH("friendchain",hourlyArray) == -1 || ASEARCH("torichainA",hourlyArray) == -1 || ASEARCH("torichainB",hourlyArray) == -1
+	{OnStartChain}
+	
+	if ASEARCH("saidtimeslot",hourlyArray) == -1
+	{"%(timeTalk)"}
+	
+	if ASEARCH("saidweekday",hourlyArray) == -1
+	{"%(dayTalk)"}
+	
+	if ASEARCH("saidmonthly",hourlyArray) == -1
+	{"%(monthTalk)"}
+	
+	
+	// -------- Mood Conditionals --------
+	if ASEARCH("happyness",extraMood) != -1
+	{
+	
+	}
+	if ASEARCH("surprise",extraMood) != -1
+	{
+		"\0\s[15]%(Flowey) * What?! No. \_w[500]"
+	}
+	if ASEARCH("revulsion",extraMood) != -1
+	{
+		"\0\s[21]%(Narrator) * (He's clearly annoyed.)\_w[1000]\n[300] * (Was it something you did?)"
+		
+		"\0\s[18]%(Narrator) * (You feel him judging you.) \_w[500]"
+	}
+	if ASEARCH("sadness",extraMood) != -1
+	{
+	
+	}
+	if ASEARCH("anger",extraMood) != -1
+	{
+		"\0\s[22]%(Flowey) * WHY WHY WHY WHYWHYWHY _HY _ON'T YOU LET ME _IN?!\_w[500]"
+		
+		"\0\s[17]%(Flowey) * YOU! STOP!\_w[1500]"
+	}
+	if ASEARCH("fear",extraMood) != -1
+	{
+	
+	}
+	
+	
+	// -------- Consequences --------
+	if ASEARCH("punching",agreedToConsequences) >= 0
+	{
+		"\0\s[16]%(Narrator) * (While doing something else, you hit the flower. Since you didn't do it on purpose this time, it doesn't hurt him.)\_w[500]"
+	}
+	if ASEARCH("naming",agreedToConsequences) >= 0
+	{
+		"\0\s[18]%(Flowey) * %(nomPro) %(nomPro) %(nomPro) ... %(thatonename)\_w[500]"
+	}
+	
+	// -------- Base Dialogue --------
+	
+	"\0\s[3]%(Flowey) * You you you how how how\_w[1000]\c\s[3]Howdy, %(username)!\_w[500]"
+		
+		
+	{
+		"\0\s[3]%(Flowey) * It's all a %(nightmare)... \_w[1000]\c\_w[500]\s[16]AND WE'RE NEVER WAKING UP!!!!!!\_w[2500]\c%(floweyLaugh)\_w[500]"
+	}
+	
+	
+	"\0\s[27]%(Flowey) * Howdy! \_w[500]"
+
+	"\0\s[13]%(Flowey) * You... are...? \_w[500]"
+	
+	"\0\s[7]%(Narrator) * Is there something over there?\_w[500]"
+
+	"\0\s[4]%(Narrator) * You wonder what caught his attention. \_w[1000]\n[200] * There are no answers.\_w[500]"
+		
+	"\0\s[3]%(Narrator) * (Smells like herbicide.)\_w[500]"
+	
+	
+	// -------- All Reset and LV Specific Conditionals --------
+
+	if ellVee == 1
+	{
+		
+		// ---- f_lowe_y ----
+			
+		"\0\s[3]%(Flowey) * .... you you you... friend? \_w[500]"
+
+		"\0\s[21]%(Flowey) * Don't.Don't.Don't.Don't.Don't.\_w[1500] h_ve _nything bette_ to do?\_w[500]"
+		
+		// ---- Narrator ----
+		
+		
+		
+		"\0\s[3]%(Narrator) * f_lowe_y asks %(adverb) if you remember something. \_w[1500]\c\n[200] * It seems he's mistaken you for someone else.\_w[500]"
+		
+		"\0\s[5]%(Narrator) * f_lowe_y is looking at something.\_w[1000]\n[200] (It's not you.) \_w[500]"
+		
+		"\0\s[12]%(Narrator) * You caught the flower by surprise.\_w[500]"
+
+		"\0\s[3]%(Narrator) * You say hello. He doesn't seem to be listening\_w[500]"
+
+		"\0\s[8]%(Narrator) * f_lowe_y is looking at something. \_w[500]"
+
+		"\0\s[9]%(Narrator) * You give the flower a hug. \_w[500]"
+		
+		// ---- Both ----
+		"\0\s[3]%(Flowey) * .... you you you... \_w[1000]\s[23]friend! \_w[1000]\n/
+		\n[200]%(Narrator)\n[200] * He seems very %(adjectives) about that."
+		
+		"\0%(fleeSFX)\s[-1]\_w[1000]%(Narrator)\f[align,center]\n[300] * Flowey ran away.\_w[3000]\b[-1]\_w[3000]\c/
+		\0\b4%(shortLaughVFX)\f[height,100]Die. \_w[3000]\b[-1]\c/
+		\_w[2500]\b0%(Narrator)\f[align,center]\n[300] * But nobody came."
+
+	}
+	if ellVee >= 2
+	{
+		// "\0\s[14]%(Narrator) * (Something seems to be wrong.) \_w[500]"
+	
+		
+		
+	
+		
+		"\0\s[24]%(Flowey) * HAHAHAHAHAHAHAHA"
+	
+		"\0\s[26]\i[0]%(Flowey)\f[align,center]EVERYONE"
+		
+
+		"\0\s[26]\i[1]%(Flowey)\f[align,center]\![embed,OnGLITCH,EVERYONE]"
+
+		
+		// "\0\s[27]%(Narrator) * Swing and miss. "
+		
+		// "\0\s[27]%(Flowey)"
+		
+		"\0\s[28]%(Narrator)"
+
+		"\0\s[29]%(intermissionSFX)"
+	}
+}
+
+// ---- Chains ----
+//Chain dialogue is unique. A dialogue chain consists of multiple bits of dialogue that get called in order over a period of time.
+
+OnStartChain
+{
+	_test = RAND(100)
+	if _test >= 59 && ASEARCH("friendchain",hourlyArray) != -1
+	{	
+		hourlyArray ,= "friendchain"
+		"\0\s[3]%(Flowey) * Finally. :chain=friendchain0"
+	}
+	elseif _test >= 29 && ASEARCH("torichainA",hourlyArray) != -1
+	{
+		hourlyArray ,= "torichainA"
+		"\0\s[30]%(Toriel) * Where oh where oh where oh where \_w[1500] my cccchhhhiiiillllldddd\_w[1500]:chain=torichainA1"
+	}
+	elseif ASEARCH("torichainB",hourlyArray) != -1
+	{
+		hourlyArray ,= "torichainB"
+		"\0\s[30]%(Toriel) * Where oh where oh where oh where \_w[1500] It's so cold. So cold.\_w[1500]:chain=torichainB1"
+	}
+}	
+	
+// ---- Chained Dialogue ----
+	
+friendchain0
+{{CHAIN
+	"\0\s[14]%(Flowey) * Tired. I'm so tired. Tired. Tired of being a flower.:chain=friendchain1"
+}}CHAIN
+
+friendchain1
+{{CHAIN
+	"\0\s[13]%(Flowey) * %(username), are you there? \n/
+	\1\s[-1]\n[300]\f[align,left] \![*] \q[Yes,OnDialogueResponder,yesthere]\n \n[-100]\f[align,right]\![*] \q[No,OnDialogueResponder,nothere]"
+}}CHAIN
+
+friendchain2
+{{CHAIN
+	"\0\s[3]%(Flowey) * It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.It's me.\_w[500]\c\s[28]\_q * It's me, your best friend.\_w[1000]\s[0]:chain=end"
+}}CHAIN
+
+
+torichainA1
+{{CHAIN
+	"\0\s[30]%(Toriel) * I've been looking. \_w[500]Looking. \_w[1500] All over for you.\_w[1500]:chain=torichainA2"
+}}CHAIN
+
+torichainA2
+{{CHAIN
+	"\0\s[8]%(shortLaughVFX) * Hee hee hee. \_w[1500]%(Flowey)Is that what you wanted to hear? \_w[1500]You'll NEVER see her again.\_w[1500]:chain=end"
+}}CHAIN
+
+
+torichainB1
+{{CHAIN
+	"\0\s[30]%(Toriel) * It's so dark. \_w[500]Where am I? \_w[1500]Someone help me...\_w[1500]:chain=torichainB2"
+}}CHAIN
+
+torichainB2
+{{CHAIN
+	"\0\s[30]%(Toriel) * Anyone... \_w[500]Please... \_w[1500]Help\_w[1500]:chain=end"
+}}CHAIN
+
+OnDialogueResponder
+{
+	case reference[0]
+	{
+		when "yesthere"
+		{
+			"\0\s[6]:chain=friendchain2"
+		}
+		when "nothere"
+		{
+			meanvariable ++
+			"\0\s[11]\1\s[-1] * Well that wasn't very nice..."
+		}
+	}
+}
+
+// FlagArray ,= 'newflag' and ASEARCH('newflag',FlagArray) != -1
+
+// ---- More Time Functions ----
+// Keeps track of if an hour has passed. Just ignore this.
+
+
+timeTalk
+{
+	if timeslot == "earlymorning"
+	{
+		"\0\s[3]%(Flowey) * Early morning."
+	}
+	if timeslot == "morning"
+	{
+		"\0\s[3]%(Flowey) * Morning."
+	}
+	if timeslot == "lunch"
+	{
+		"\0\s[3]%(Flowey) * Lunch time."
+	}
+	if timeslot == "afternoon"
+	{
+		"\0\s[3]%(Flowey) * Afternoon."
+	}
+	if timeslot == "evening"
+	{
+		"\0\s[3]%(Flowey) * Evening."
+	}
+	if timeslot == "latenight"
+	{
+		"\0\s[3]%(Flowey) * Late night."
+	}
+	if timeslot == "weehours"
+	{
+		"\0\s[3]%(Flowey) * %(lateearly)"
+	}
+	--
+	"\e:eval=hourlyArray ,= 'saidtimeslot'"
+}
+
+dayTalk
+{
+	if weekday == 0
+	{
+		"\0\s[3]%(Flowey) * Sunday."
+	}
+	if weekday == 1
+	{
+		"\0\s[3]%(Flowey) * Monday."
+		
+	}
+	if weekday == 2
+	{
+		"\0\s[3]%(Flowey) * Tuesday."
+	}
+	if weekday == 3
+	{
+		"\0\s[3]%(Flowey) * Wednesday."
+	}
+	if weekday == 4
+	{
+		"\0\s[3]%(Flowey) * Thursday."
+	}
+	if weekday == 5
+	{
+		"\0\s[3]%(Flowey) * Friday."
+	}
+	if weekday == 6
+	{
+		"\0\s[3]%(Flowey) * Saturday."
+	}
+	--
+	"\e:eval=hourlyArray ,= 'saidweekday'"
+}
+
+monthTalk : nonoverlap_pool
+{
+	if month == 1
+	{
+		"\0\s[3]%(Flowey) * January."
+		"\0\s[3]%(Flowey) * New. New. New. New. Year. New Year. New year. new year. Happy. \n H A P P Y NEW YEAR"
+		"\0\s[3]%(Narrator) * (Celebratory noises)"
+	}
+	if month == 2
+	{
+		"\0\s[3]%(Flowey) * February."
+		"\0\s[3]%(Flowey) * Love. LOVE. LV. Celebrate LV. Right?"
+		
+	}
+	if month == 3
+	{
+		"\0\s[3]%(Flowey) * March."
+		"\0\s[3]%(Flowey) * Third month. Third month. Th- Thi- Th- The start of spring."
+		
+	}
+	if month == 4
+	{
+		"\0\s[3]%(Flowey) * April."
+		"\0\s[3]%(Flowey) * 4 4 4 4 FOUR four Fourth month"
+		
+	}
+	if month == 5
+	{
+		"\0\s[3]%(Flowey) * May."
+		"\0\s[3]%(Flowey) * The fifth month."
+		"\0\s[3]%(Flowey) * May flowers. Flowers. Flowers are blooming!\s[16]\_w[500]\c\s[3]%(Flowey) * Howdy! I'm f_lowe_y the flower!\_w[500]"	
+	}
+	if month == 6
+	{
+		"\0\s[3]%(Flowey) * June."
+		"\0\s[3]%(Flowey) * Hot.Hot.Hot.Not.Not.Not."
+		
+	}
+	if month == 7
+	{
+		"\0\s[3]%(Flowey) * July."
+		"\0\s[3]%(Flowey) * Is it summer yet? "
+	}
+	if month == 8
+	{
+		"\0\s[3]%(Flowey) * August."
+	}
+	if month == 9
+	{
+		"\0\s[3]%(Flowey) * September."
+	}
+	if month == 10
+	{
+		"\0\s[3]%(Flowey) * October."
+		"\0\s[3]%(Flowey) * Halloween. Humans in monster suits.\_w[1000]\n\s[18] * Funny."
+	}
+	if month == 11
+	{
+		"\0\s[3]%(Flowey) * November."
+		"\0\s[3]%(Flowey) * Thank_giving?"
+	}
+	if month == 12
+	{
+		"\0\s[3]%(Flowey) * December."
+		"\0\s[3]%(Flowey) * Merry.Merry.Merry.Merry.Merry.Merry.Merry.Merry.Merry.Merry.Merry.Merry.Merry."
+	}
+	--
+	"\e:eval=hourlyArray ,= 'saidmonthly'"
+}
+
+
+
+// ---- OnMinuteChange ----
+// Time related dialogue using the OnMinuteChange function
+OnMinuteChange //This is what will trigger time-based dialogue for your Ghost.
+{
+	HourCheck //checks to see if an hour has passed, ignore it
+	--
+ 	if minute == 0 //These ifs will check what time it is. 
+	{
+ 		
+	}
+	elseif hour == 23 && minute == 55 //this checks to see if the hour is 23 and the minutes are at 55... essentially, 11:55 pm.
+	{
+		"\0\s[3]%(Flowey) * 5 minutes to midnight."
+	}
+	
+	elseif mikireflag == 1
+ 	{
+ 		MikireTalk
+	}
+}
+
+// ---- OnSecondChange ----
+// Like the above, this handles what happens every time a second goes by.
+
+OnSecondChange
+{
+	if passsec == 59
+ 	{
+	 	passsec = 0
+ 		passmin = passmin + 1
+	}
+ 	else
+ 	{
+	 	passsec = passsec + 1
+	}
+	if mikireflag == 0 && reference[1] == 1 
+	{
+		//"\0\s[3]You've moved me off screen."
+		
+		MikireTalk
+	}
+	if mikireflag == 1 && reference[1] == 0 //Dialogue for coming back on the screen
+	{
+		EndMikireTalk
+	}
+	mikireflag = reference[1] //reference1 is if the ghost is offscreen or not
+	if reference[2] == 1
+	{
+ 		""
+	}
+}
+
+HourCheck
+{
+if passmin >= 59
+	{
+		timeslot = GetTimeSlot
+		passmin = 0
+		passhour = passhour + 1
+	}
+}
+
+
+OnHourTimeSignal
+{
+	_playbells = TOSTR("")
+	for _i = 0; _i < hour12; _i++ 
+	{
+		LOGGING("Loop %(_i)")
+		_playbells = _playbells + "%(towerBell)\_w[1000]"
+	}
+	--
+	
+	if hour == 12 //And the hour equals 12, meaning it's noon. 
+	{
+		"\0\s[3]%(towerBell2)\_V%(Flowey) * It's noon."
+	}
+	elseif hour == 0
+	{
+		"\0\s[3]%(towerBell2)\_V%(Flowey) * It's midnight!"
+	}
+	else
+	{
+		
+		"\0\s[3]%(_playbells)\_V%(Flowey) * It's %(dishour) o'clock.\e"
+	}
+
+}
+//---- MikireTalk ----
+//MikireTalk is dialogue for when your main character is off-screen.
+ 
+MikireTalk
+{
+	if RAND(100) < 49 
+	{
+		rescue = 1
+		"\0\s[15]%(Flowey) * No. No. No. No. No. No. Back. Back. Back.\n * Ctrl-Shift-F12 to bring back.\_w[500]"
+		
+	}
+	else
+	{
+		rescue = 0
+		"\0\s[15]%(Narrator) * (f_lowe_y seems distressed.)\n[200] * (Press Ctrl-Shift-F12 to ease his pain.)\_w[500]"
+	}
+}
+
+// ---- EndMikireTalk -----
+//For after you bring the character back on screen.
+ 
+EndMikireTalk
+{
+	 if  rescue == 1 
+	{
+		rescue = 0
+		"\0\s[9]%(Flowey) * Back. Good. Thank.\_w[500]\s[3]Thank. Thank. Thank. Thank. Thank.\_w[500]"
+	}
+	else
+{
+		rescue = 0
+		"\0\s[9]%(Narrator) * (f_lowe_y looks relieved.)\_w[1500]"
+	}
+}
+
+
+// -------- OnSurfaceRestore --------
+// What this does is that after a short period of time, the ghost will go back to its default pose, so you won't have a ghost stuck in one expression for too long.
+
+OnSurfaceRestore
+{	
+	"\0\s[0]\1\s[-1]\e"	
+}
+
+ 

@@ -1,0 +1,133 @@
+﻿// -----Character set-----
+charset,UTF-8
+
+
+// -----Creator Info-----
+craftman, Era the Outworlder
+craftmanw, Era the Outworlder
+craftmanurl, https://era-the-outworlder.github.io/era_makes_ghosts/index.html
+homeurl,https://raw.githubusercontent.com/Era-The-Outworlder/era_makes_ghosts/main/updates/f_lowe_y/
+readme, readme.txt
+readme.charset,UTF-8
+
+// -----Taskbar Icon-----
+icon, HTflowey.ico
+icon.minimize, HTflowey.ico
+
+// -----Custom Cursors-----
+// cursor,flowerycursor.cur
+// mousecursor.text, filename
+// mousecursor.wait, filename
+
+// -----Menu Font-----
+// menu.font.name, Determination Mono
+// menu.font.height, 13
+
+// -----SHIORI-----
+//Name of SHIORI file
+shiori,yaya.dll
+shiori.cache,0
+// shiori.version,3.0
+// shiori.encoding,UTF-8
+// shiori.forceencoding,UTF-8
+
+
+
+// Background image for AI usage graph
+// image size is 288x288px
+// shiori.logo.file, resources\niseshiori.png
+// shiori.logo.x,16
+// shiori.logo.y,256
+// shiori.logo.align, location information
+
+
+// ----- Ghost Identification -----
+
+name,f_lowe_y
+type,ghost
+id,f_lowe_y
+title,HELP_tale Flowey
+sakura.name,f_lowe_y
+sakura.name2,Flowey
+kero.name,The Narrator
+// char3.name, The Locket
+
+//Shell allowed to override sakura/kero/char{*} names when 1
+name.allowoverride,0
+
+
+//----- Default Surfaces and Positions -----
+
+seriko.alignmenttodesktop, free
+// seriko.defaultsurfacedirectoryname,\master\
+
+// ---- Sakura ----
+sakura.seriko.alignmenttodesktop,free
+
+sakura.seriko.defaultsurface, 0
+
+// sakura.defaultx,50
+// sakura.defaulty,-457
+sakura.defaultleft,50
+// sakura.defaulttop,600
+
+// ---- Kero ----
+kero.seriko.alignmenttodesktop, free
+
+kero.seriko.defaultsurface,10
+
+// kero.defaultx,100
+// kero.defaulty,0
+kero.defaultleft,225
+kero.defaulttop,0
+
+// ---- Char3 ----
+// char3.seriko.alignmenttodesktop,free
+// char3.seriko.defaultsurface,10
+
+// char3.defaultx,0
+// char3.defaulty,0
+// char3.defaultleft,0
+// char3.defaulttop,0
+
+// ---- Balloon ----
+balloon.defaultsurface,0
+sakura.balloon.defaultsurface,0
+kero.balloon.defaultsurface,0
+char3.balloon.defaultsurface,0
+
+
+sakura.balloon.offsetx,-10
+sakura.balloon.offsety,-100
+
+
+kero.balloon.offsetx,-170
+kero.balloon.offsety,-350
+
+
+balloon.dontmove,false
+balloon,underTRASH
+default.balloon.path,\yaub_under_trash\
+
+recommended.balloon,underTRASH
+recommended.balloon.path,\yaub_under_trash\
+
+
+// ---- Additional Settings ----
+// Do not receive SSTP with no ghost designation at 0. The default is 1.
+sstp.allowunspecifiedsend,1
+
+// 0 means no COMMUNICATE. The default is 1.
+sstp.allowcommunicate,1
+
+// Force OnTranslate
+sstp.alwaystranslate,1
+
+// Ignore OnMouseMove if 1
+don't need onmousemove,0
+
+// Ignore dressup if 1
+don't need bind,1
+
+// Ignore SERIKO Talk if 1
+don't need seriko talk,0

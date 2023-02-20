@@ -1,0 +1,417 @@
+
+//  '||'''|,                ||    '||         ||`                  
+//   ||   ||   ''           ||     ||         ||                   
+//   ||;;;;    ||  '||''| ''||''   ||''|, .|''||   '''|.  '||  ||` 
+//   ||   ||   ||   ||      ||     ||  || ||  ||  .|''||   `|..||  
+//  .||...|'  .||. .||.     `|..' .||  || `|..||. `|..||.      ||  
+//                                                          ,  |'  
+//                                                           ''    
+
+//I moved all birthdate related functions together for clarity, merged duplicates, etc.
+//At least I think it's better. It's certainly more appealing to me to do it this way. <3 Era
+
+
+// Gets the info the user may have set in SSP's settings and separates it into global variables
+OnNotifyUserInfo
+{
+
+	menuNName = SHIORI3FW.UserName
+	menuRName = SHIORI3FW.UserNameFull
+	menuBYear = TOSTR(SHIORI3FW.UserBirthday[0])
+	menuBMonth = TOSTR(SHIORI3FW.UserBirthday[1])
+	menuBDay = TOSTR(SHIORI3FW.UserBirthday[2])	
+}
+
+// Function called to have the user input their birthday. 
+// Name retained for compatibility w/GT Template ghosts.
+OnGetBirthday	
+{
+	OnNotifyUserInfo
+	--
+	// This is setting up in case today is the user's birthday.
+	// Format retained for compatibility w/GT Template ghosts.
+	dayslot = GetDaySlot 
+	
+	"\0\s[0]%(Narrator)\n\n\n * Enter Birthdate. \n/
+	\![open,dateinput,OnInputBirthdate,,%(menuBYear),%(menuBMonth),%(menuBDay)]\x\n"
+	
+}
+
+// The function that evaluates the input birthdate
+OnInputBirthdate
+{
+	_a = SPLIT(reference[0],',')
+	_tempyear = TOINT(_a[0])
+	_tempmonth  = TOINT(_a[1])
+	_tempday  = TOINT(_a[2])
+	
+	{	
+		//assigning year # and print version to global vars
+		bornyear = _tempyear
+		bornyearprint = ""
+		_cent = ""
+		_dec = ""
+		_yr = ""
+		_error = ""
+		
+		_num = IARRAY 
+		 
+		// Separates digits of year to be evaluated separately
+		for _i=0;_i<4;_i++
+		{
+			_num[_i] = SUBSTR(_tempyear,_i,1)
+		}
+		--
+		if _num[0] == 1 // Year is 1XXX
+		{
+			if _num[1] == 6 && _num[2] == 0 {_cent = "Sixteen hundred and "}
+			elseif _num[1] == 6 {_cent ="Sixteen "}
+			elseif _num[1] == 7 && _num[2] == 0 {_cent ="Seventeen hundred and "}
+			elseif _num[1] == 7 {_cent ="Seventeen "}
+			elseif _num[1] == 8 && _num[2] == 0 {_cent ="Eighteen hundred and "}
+			elseif _num[1] == 8 {_cent ="Eighteen "}
+			elseif _num[1] == 9 && _num[2] == 0 {_cent ="Nineteen hundred and "}
+			elseif _num[1] == 9 {_cent ="Nineteen "}
+			else{"%(errorMsg)"}	
+		}
+		elseif _num[0] == 2 // Year is 2XXX
+		{
+			// Year is 200X
+			if _num[1] == 0 && _num[2] == 0 {_cent = "Two thousand "}
+			// Year is 20XX
+			elseif _num[1] == 0 {_cent ="Twenty "}
+			else
+			{
+				_error = "The distant future "
+				"\![set,autoscroll,disable]The Developer considered the likelihood of anyone continuing to use this software into the 21st century or beyond to be highly unlikely. They would like to apologise to any time-travellers, historians or collectors of ancient technology this may inconvinence.\x"
+			}
+		}	
+		else // Year is 3000+
+		{
+			_error = "The far-flung future "
+			"\![set,autoscroll,disable]The Developer considered the likelihood of anyone continuing to use this software into the 30th century or beyond to be unlikely to the extreme. They would like to apologise to any time-travellers, historians or collectors of ancient technology this may inconvinence.\x"
+		}
+		--		
+		if _num[2] == 0 // Year is XX0X
+		{
+			_dec = ""
+		}
+		elseif _num[2] == 1 // Year is XX1X
+		{
+			_dec = "teen"
+			if _num[3] == 1 {_yr = "eleven"}
+			elseif _num[3] == 2 {_yr ="twelve"}
+			elseif _num[3] == 3 {_yr ="thirteen"}
+			elseif _num[3] == 4 {_yr ="fourteen"}
+			elseif _num[3] == 5 {_yr ="fifteen"}
+			elseif _num[3] == 6 {_yr ="sixteen"}
+			elseif _num[3] == 7 {_yr ="seventeen"}
+			elseif _num[3] == 8 {_yr ="eighteen"}
+			elseif _num[3] == 9 {_yr ="nineteen"}
+			else{_yr ="ten"}
+		}
+		else
+		{
+			if _num[2] == 2 {_dec ="twenty"}
+			elseif _num[2] == 3 {_dec ="thirty"}
+			elseif _num[2] == 4 {_dec ="forty"}
+			elseif _num[2] == 5 {_dec ="fifty"}
+			elseif _num[2] == 6 {_dec ="sixty"}
+			elseif _num[2] == 7 {_dec ="seventy"}
+			elseif _num[2] == 8 {_dec ="eighty"}
+			elseif _num[2] == 9 {_dec ="ninety"}
+			else{""}	
+		}
+		--
+		if _num[3] == 1 {_yr = "one"}
+		elseif _num[3] == 2 {_yr ="two"}
+		elseif _num[3] == 3 {_yr ="three"}
+		elseif _num[3] == 4 {_yr ="four"}
+		elseif _num[3] == 5 {_yr ="five"}
+		elseif _num[3] == 6 {_yr ="six"}
+		elseif _num[3] == 7 {_yr ="seven"}
+		elseif _num[3] == 8 {_yr ="eight"}
+		elseif _num[3] == 9 {_yr ="nine"}
+		else{""}	
+	--
+	if _error != "" {bornyearprint = _error}
+	elseif _dec == "" {bornyearprint = "%(_cent)%(_yr)"}
+	elseif _yr == "" {bornyearprint = "%(_cent)%(_dec)"}
+	else {bornyearprint = "%(_cent)%(_dec)-%(_yr)"}
+		
+	}
+	--
+	{	// assigning month# and name to globar vars
+		bornmonth = _tempmonth
+		if _tempmonth == 1 {bornmonthprint = "January"}
+		elseif _tempmonth == 2 {bornmonthprint = "February"}
+		elseif _tempmonth == 3 {bornmonthprint = "March"}
+		elseif _tempmonth == 4 {bornmonthprint = "April"}
+		elseif _tempmonth == 5 {bornmonthprint = "May"}
+		elseif _tempmonth == 6 {bornmonthprint = "June"}
+		elseif _tempmonth == 7 {bornmonthprint = "July"}
+		elseif _tempmonth == 8 {bornmonthprint = "August"}
+		elseif _tempmonth == 9 {bornmonthprint = "September"}
+		elseif _tempmonth == 10 {bornmonthprint = "October"}
+		elseif _tempmonth == 11 {bornmonthprint = "November"}
+		elseif _tempmonth == 12 {bornmonthprint = "December"}
+	}
+	--
+	{
+		bornday = _tempday
+		borndayprint = Printday
+		userbirthday = "%(bornmonth)month %(bornday)day"
+		birthdayprint = "%(bornmonthprint) %(borndayprint)"
+		
+	}
+	--
+	// Checks birthday against conditionals for finishing dialogue
+	"%(birthchecked)" 
+	--
+	if firstBoot == 1 || firstBoot == 2
+	{
+		"\_w[500]\_s\b[-1]\c\_s"
+		--
+		"\![timerraise,1000,1,OnFBContinue]"
+	}
+	else
+	{
+		"\e"
+	}
+}
+
+//This adds an appropriate ordinal suffix to the day.
+
+Printday
+{
+	if bornday == 1 || bornday == 21 || bornday == 31
+	{
+	"%(bornday)st"
+	}
+	elseif bornday == 2 || bornday == 22
+	{
+	"%(bornday)nd"
+	}
+	elseif bornday == 3 || bornday == 23
+	{
+	"%(bornday)rd"
+	}
+	else
+	{
+	"%(bornday)th"
+	}
+}	
+
+//----birthchecked----
+
+
+birthchecked
+{
+	if bornmonth == month && bornday == day
+	{
+		if bornmonth == 1
+		{
+			if bornday == 1
+			{
+				"\0\s[3]%(Flowey) * New. New. New. New. Year. New Year. New year. new year. Happy. \n H A P P Y \![embed,OnGLITCH,birthday]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\n The first day of a new year.\_w[1500]"
+			}
+			elseif bornday == 14
+			{
+				"\0\s[3]%(Narrator) * It's your birthday today.\n The first day of a \![embed,OnGlitchMidi,new year], by some accounts. Make it a good one, %(username)\_w[1500]"
+			}			
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today. Stay warm, _user. \_w[1500]"
+			}
+		}
+		elseif bornmonth == 2
+		{
+			if bornday == 2
+			{
+				"\0\s[3]%(Flowey) * \![embed,OnGLITCH,happy birthday].\_w[500]\n * \![embed,OnGLITCH,happy birthday].\_w[500]\n * \![embed,OnGLITCH,happy birthday].\_w[500]\n"
+				"\0\s[3]%(Narrator) * Have you ever gotten the feeling you've done this before?\_w[500]\0\s[3]%(Flowey) * HAPPY \![embed,OnGLITCH,birthday] "
+			}
+			elseif bornday == 14
+			{
+				"\0\s[3]%(Flowey) * Love. LOVE. LV. Celebrate. Celebrate. \![embed,OnGLITCH,celebrate].\n YOU."
+			}
+			elseif bornday == 15
+			{
+				"\0\s[29]%(Narrator) * What a strange coincidence, the collapse of a multiverse occurring on the anniversary of one's birth. "
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+		elseif bornmonth == 3
+		{
+			if bornday == 14
+			{
+				"\0\s[3]%(Flowey) * %(piDay)"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+		elseif bornmonth == 4
+		{
+			if bornday == 1
+			{
+				"\0\s[3]%(Flowey) * \![embed,OnGLITCH,you fool]."
+				"\0\s[3]%(Narrator) * What a funny day.\_w[1500]"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today. How's the weather?\_w[1500]"
+			}
+		}
+		elseif bornmonth == 5
+		{
+			if bornday == 14
+			{
+				"\0\s[3]%(Flowey) * Take a \![embed,OnGLITCH,moment]. Look look \![embed,OnGLITCH,look] \![embed,OnGLITCH,look] \![embed,OnGLITCH,look] at the \![embed,OnGlitchMidi,sky].\n \![embed,OnGlitchMidi,You were born under one.]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\n Take a look at the sky and celebrate.\_w[1500]"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+		elseif bornmonth == 6
+		{
+			if bornday == 25
+			{
+				"\0\s[3]%(Flowey) \_w[1000]* Merry\_w[1000] Gyftmas.\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\n And it's Gyftmas, too?\_w[1500]"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+		elseif bornmonth == 7
+		{
+			if bornday == 25
+			{
+				"\0\s[3]%(Flowey) \_w[1000]* Merry\_w[1000] Gyftmas.\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\n And it's Gyftmas, too?\_w[1500]"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+		elseif bornmonth == 8
+		{
+			if bornday == 25
+			{
+				"\0\s[3]%(Flowey) \_w[1000]* Merry\_w[1000] Gyftmas.\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\n And it's Gyftmas, too?\_w[1500]"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+		elseif bornmonth == 9
+		{
+			if bornday == 25
+			{
+				"\0\s[3]%(Flowey) \_w[1000]* Merry\_w[1000] Gyftmas.\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\n And it's Gyftmas, too?\_w[1500]"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+		elseif bornmonth == 10
+		{
+			if bornday == 25
+			{
+				"\0\s[3]%(Flowey) \_w[1000]* Merry\_w[1000] Gyftmas.\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\n And it's Gyftmas, too?\_w[1500]"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+		elseif bornmonth == 11
+		{
+			if bornday == 25
+			{
+				"\0\s[3]%(Flowey) \_w[1000]* Merry\_w[1000] Gyftmas.\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\n And it's Gyftmas, too?\_w[1500]"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+		elseif bornmonth == 12
+		{
+			if bornday == 25
+			{
+				"\0\s[3]%(Flowey) \_w[1000]* Merry\_w[1000] Gyftmas.\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\n And it's Gyftmas, too?\_w[1500]"
+			}
+			else
+			{
+				"\0\s[8]%(Flowey) * %(HAPPY) \c%(Flowey) * Happy birthday, %(username).\_w[1000]\_w[1000]\_w[500]"
+				"\0\s[3]%(Narrator) * It's your birthday today.\_w[1500]"
+			}
+		}
+	}
+	else
+	{
+		if bornmonth == 1
+		{}
+		elseif bornmonth == 2
+		{}
+		elseif bornmonth == 3
+		{}
+		elseif bornmonth == 4
+		{}
+		elseif bornmonth == 5
+		{}
+		elseif bornmonth == 6
+		{}
+		elseif bornmonth == 7
+		{}
+		elseif bornmonth == 8
+		{}
+		elseif bornmonth == 9
+		{}
+		elseif bornmonth == 10
+		{}
+		elseif bornmonth == 11
+		{}
+		elseif bornmonth == 12
+		{
+			if bornday == 25
+			{
+				"\0\s[3]%(Narrator) * That's right, you were born on insert_holiday...\_w[1500]"
+			}
+			else
+			{
+				"\0\s[3]%(Flowey) * %(bornmonthprint) %(borndayprint), %(bornyear)? Is _ha_... righ_..."
+				"\0\s[3]%(Narrator) * %(bornmonthprint) %(borndayprint), %(bornyear).\n f_lowe_y will remember that.\_w[1500]"
+			}
+		}
+	}
+}

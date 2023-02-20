@@ -1,0 +1,411 @@
+//  ▄▄▄▄▄▄▄▄▄▄      ▄▄▄▄▄▄▄▄▄▄▄     ▄▄▄▄▄▄▄▄▄▄▄    
+// ▐░░░░░░░░░░▌    ▐░░░░░░░░░░░▌   ▐░░░░░░░░░░░▌   
+// ▐░█▀▀▀▀▀▀▀█░▌   ▐░█▀▀▀▀▀▀▀█░▌   ▐░█▀▀▀▀▀▀▀█░▌   
+// ▐░▌       ▐░▌   ▐░▌       ▐░▌   ▐░▌       ▐░▌   
+// ▐░▌       ▐░▌   ▐░█▄▄▄▄▄▄▄█░▌   ▐░█▄▄▄▄▄▄▄█░▌   
+// ▐░▌       ▐░▌   ▐░░░░░░░░░░░▌   ▐░░░░░░░░░░░▌   
+// ▐░▌       ▐░▌   ▐░█▀▀▀▀█░█▀▀    ▐░█▀▀▀▀▀▀▀▀▀    
+// ▐░▌       ▐░▌   ▐░▌     ▐░▌     ▐░▌     
+// ▐░█▄▄▄▄▄▄▄█░▌ ▄ ▐░▌      ▐░▌  ▄ ▐░▌   ▄ 
+// ▐░░░░░░░░░░▌ ▐░▌▐░▌       ▐░▌▐░▌▐░▌  ▐░▌
+//  ▀▀▀▀▀▀▀▀▀▀   ▀  ▀         ▀  ▀  ▀    ▀ 
+
+// This dictionary is all functions relating to the Discord Rich Presence Plugin
+
+//The main DRP settings menu. OnDRPSet sets the "CustomDetail" info. OnDevSet sets "SmallImageText"
+OnDRPMenu
+{
+	"\0\b2Discord Rich Presence\n\n"
+	--
+	'\![*] \q[Change Status,OnDRPSelect]\n[150]'
+	--
+	if username == "Era"
+	{
+		"\![*] \q[Change DevStatus,OnDevStatMenu]\n[150]"
+		--
+		"\![*] \q[Check Attitude,OnCheckDRPAttitude]\n[150]"
+	}
+	else
+	{
+		"\n[300]"
+	}
+	--
+	"\n[150]"
+	--
+	if InDiscordPluginCustom == 1
+	{
+		"\f[color,#fb0300]\![*] \q[Force Update,OnDiscordPluginCustom] \f[color,default]\n[150]"
+	}
+	else
+	{
+		"\![*] \q[Turn On,OnDiscordPluginCustom]\n[150]"
+	}
+	--
+	if reference[0] == "menu"
+	{
+		"\![*] \q[Main Menu,OnMenuRun]\e"
+	}
+	elseif reference[0] == "firstboot"
+	{
+		"\t"
+	}
+	else
+	{
+		"\![*] \q[Close Menu,OnMenu,cancel]\e"
+	}
+}	
+
+// ---- Setting Status aka CustomDetail ----
+OnDRPSelect
+{
+	"\n\nEnter your desired message:\![open,inputbox,OnDRPSet]\x"
+}
+OnDRPSet
+{
+	drpstatus = SANITISE(reference[0])
+	OnDiscordPluginCustom
+}
+
+DiscordCustom.UserDetail
+{
+	if !InDiscordPluginCustom
+	{
+		return
+	}
+	else
+	{
+		DiscordCustomSet.CustomDetail(drpstatus)
+	}
+}
+
+
+// ---- Setting Dev Information ----
+
+// Short Menu for setting DevStatus
+OnDevStatMenu
+{	
+
+	"\c\b2\n\n\_q\f[align,center]Select Development Mode:\n\n"
+	--
+	if devstate == "NONE"
+	{"\f[color,#00ffcc]\![*]\q[None,OnDevType,NONE]\f[color,default]   "}
+	else{"\![*]\q[None,OnDevType,NONE]   "}
+	--
+	if devstate == "CODE"
+	{"\f[color,#00ffcc]\![*]\q[Programming,OnDevType,CODE]\f[color,default]\n"}
+	else{"\![*]\q[Programming,OnDevType,CODE]\n"}
+	--
+	if devstate == "WRITE"
+	{"\f[color,#00ffcc]\![*]\q[Writing,OnDevType,WRITE]\f[color,default]     "}
+	else{"\![*]\q[Writing,OnDevType,WRITE]     "}
+	--
+	if devstate == "SHELL"
+	{"\f[color,#00ffcc]\![*]\q[Art,OnDevType,SHELL]\f[color,default]"}
+	else{"\![*]\q[Art,OnDevType,SHELL]"}
+	
+	
+}
+// Sets devstate to determine SmallImageKey 
+OnDevType
+{
+	if !reference[0]
+	{devstate = ""}
+	else
+	{devstate = reference[0]}
+	--
+	if devstate == "SHELL" || devstate == "CODE" || devstate == "WRITE"
+	{"\n\nEnter Development Status Message:\x\![open,inputbox,OnDevSet]"}
+}
+
+// User Input sets smallImageCaption for SmallImageText
+OnDevSet
+{
+	_cleanRef = SANITISE(reference[0])
+	
+	if reference2 == "naming"
+	{
+		if firstBoot == 1 || firstBoot == 2 //this checks for the flag that was set during the firstBoot sequence
+		{
+			"\0\s[0]Name and development status set."
+			--
+			OnTeachPronouns
+		}
+		else
+		{
+			"\0\s[0]Name and development status set.\e"
+		}
+	}
+	elseif _cleanRef == ""
+	{smallImageCaption = ""}
+	else
+	{
+		"Status set to : %(_cleanRef)"
+		--
+		smallImageCaption = _cleanRef
+	}
+	--
+	OnDiscordPluginCustom
+}
+
+// Plugin does the work
+DiscordCustom.DeveloperSet
+{
+	if !InDiscordPluginCustom
+		return
+	if username == "Era"
+	{
+		DiscordCustomSet.SmallImageKey("dev_img")
+		--
+		DiscordCustomSet.SmallImageText(smallImageCaption)
+	}
+	else
+	{
+		DiscordCustomSet.SmallImageKey("")
+		--
+		DiscordCustomSet.SmallImageText("")
+	}
+}
+
+/* 
+
+This section is commented out because I might put it to some use later but not right now.
+
+
+// Reactive Menu for setting Moods in Discord Rich Presence by setting "LargeImageKey" and "LargeImageText" corresponding to a mood Icon set in the ghost's Discord Application. Conditionals act to highlight the currently active mood by making the text a different colour.
+
+OnDRPMoodMenu	// See OnDRPMoodSet, line
+{
+	"\b2\_q\f[align,center]Select Mood\n\n"
+	--
+	if "github" _in_ moodImageText
+	{"\f[color,#00ffcc]\![*]\q[Neutral,OnDRPMoodSet,base_img,era-the-outworlder.github.io/era_makes_ghosts]  \f[color,default]"}
+	else{"\![*]\q[Neutral,OnDRPMoodSet,base_img,era-the-outworlder.github.io/era_makes_ghosts]  "}
+	--
+	if "happy" _in_ moodImageText
+	{"\f[color,#00ffcc]\![*]\q[Happy,OnDRPMoodSet,mood_happy,happy]  \f[color,default]"}
+	else{"\![*]\q[Happy,OnDRPMoodSet,mood_happy,happy]  "}
+	--
+	if "tired" _in_ moodImageText
+	{"\f[color,#00ffcc]\![*]\q[Tired,OnDRPMoodSet,mood_tired,tired]\f[color,default]"}
+	else{"\![*]\q[Tired,OnDRPMoodSet,mood_tired,tired]"}
+	--
+	"\n[150]"
+	--
+	if "angry" _in_ moodImageText
+	{"\f[color,#00ffcc]\![*]\q[Angry,OnDRPMoodSet,mood_angry,angry]  \f[color,default]"}
+	else{"\![*]\q[Angry,OnDRPMoodSet,mood_angry,angry]  "}
+	--
+	if "sad" _in_ moodImageText
+	{"\f[color,#00ffcc]\![*]\q[Sad,OnDRPMoodSet,mood_sad,sad]  \f[color,default]"}
+	else{"\![*]\q[Sad,OnDRPMoodSet,mood_sad,sad]  "}
+	--
+	if "surprised" _in_ moodImageText
+	{"\f[color,#00ffcc]\![*]\q[Surprised,OnDRPMoodSet,mood_surprised,surprised]\f[color,default]"}
+	else{"\![*]\q[Surprised,OnDRPMoodSet,mood_surprised,surprised]"}
+	--
+	"\n[150]"
+	--
+	if "scared" _in_ moodImageText
+	{"\f[color,#00ffcc]\![*]\q[Scared,OnDRPMoodSet,mood_scared,scared]  \f[color,default]"}
+	else{"\![*]\q[Scared,OnDRPMoodSet,mood_scared,scared]  "}
+	--
+	if "confused" _in_ moodImageText
+	{"\f[color,#00ffcc]\![*]\q[Confused,OnDRPMoodSet,mood_confused,confused]  \f[color,default]"}
+	else{"\![*]\q[Confused,OnDRPMoodSet,mood_confused,confused]  "}
+	--
+	if "creepy" _in_ moodImageText
+	{"\f[color,#00ffcc]\![*]\q[Creepy,OnDRPMoodSet,mood_creepy,creepy]\f[color,default]"}
+	else{"\![*]\q[Creepy,OnDRPMoodSet,mood_creepy,creepy]"}
+	--
+	"\n\n\q[Back,OnDRPMenu]\n\q[Close,OnMenuCancel]\*"
+}
+
+// Sets the variables that are used to send the info to the plugin
+OnDRPMoodSet
+{
+	moodImageKey = reference[0]
+	--
+	if "github" _in_ reference1
+	{moodImageText = reference1}
+	else
+	{moodImageText = "Feeling: %(reference1)"}
+	--
+	OnDiscordPluginCustom
+	--
+	OnDRPMoodMenu
+}
+
+// ---- Setting Mood Info ----
+DiscordCustom.MoodSet
+{
+	if !InDiscordPluginCustom
+	{
+		return
+	}
+	else
+	{
+		DiscordCustomSet.LargeImageKey(moodImageKey)
+		--
+		DiscordCustomSet.LargeImageText(moodImageText)
+	}
+}
+ */
+ 
+ 
+ 
+// ---- Setting Minimised Status ----
+
+DiscordCustom.MinimiseSet
+{
+	if !InDiscordPluginCustom
+	{
+		return
+	}
+	else
+	{
+		DiscordCustomSet.CustomState("Minimised")
+		--
+		DiscordCustomSet.LargeImageKey("minimise_img")
+	}
+}
+
+DiscordCustom.MinimiseUnSet
+{
+	if !InDiscordPluginCustom
+	{
+		return
+	}
+	else
+	{
+		DiscordCustomSet.CustomState("")
+		--
+		DiscordCustomSet.LargeImageKey("base_img")
+	}
+}
+
+
+// -------- Plugin Responses --------
+
+// This section is near-verbatim from the guide to setting up plugin responses with the necessary replacements for my additional functions
+
+SakuraScriptArgConverter
+{
+    '"'+REPLACE(TOSTR(_argv[0]),'"','""')+'"'
+}
+
+OnDiscordPluginCustom
+{
+	InDiscordPluginCustom = 1
+	"\![raiseplugin,Discord Rich Presence,OnDiscordPluginCustomALL,"
+	--
+	"943046097276923914,"//Appid
+	--
+	","//CustomDetail
+	--
+	","//CustomState
+	--
+	"base_img,"//LargeImageKey
+	--
+	"era-the-outworlder.github.io/era_makes_ghosts,"//LargeImageText
+	--
+	","//SmallImageKey
+	--
+	""//SmallImageText
+	--
+	"]"
+	--
+	DiscordCustom.DeveloperSet
+	--
+	// Only runs if drpstatus is NOT an empty string. Plugin throws a memory access error otherwise
+	if drpstatus != ""
+	{DiscordCustom.UserDetail}
+	--
+	if drp_attitude != ""
+	{DiscordCustom.Attitude}
+	--
+	DiscordCustom.MoodSet
+}
+
+OnDiscordPluginCustomEnd
+{
+	InDiscordPluginCustom=0
+}
+
+DiscordCustomSet.base
+{
+	if InDiscordPluginCustom
+	{
+		"\![raiseplugin,Discord Rich Presence,%(_argv[0]),%(SakuraScriptArgConverter(_argv[1]))]"
+		// "\![raiseplugin,Discord Rich Presence,%(_argv[0]),%(_argv[1])]"
+	}
+}
+
+DiscordCustomSet.LargeImageKey
+{
+	DiscordCustomSet.base("OnDiscordPluginCustomLargeImageKey",_argv[0])
+}
+
+DiscordCustomSet.LargeImageText
+{
+	DiscordCustomSet.base("OnDiscordPluginCustomLargeImageText",_argv[0])
+}
+
+DiscordCustomSet.SmallImageKey
+{
+	DiscordCustomSet.base("OnDiscordPluginCustomSmallImageKey",_argv[0])
+}
+
+DiscordCustomSet.SmallImageText
+{
+	DiscordCustomSet.base("OnDiscordPluginCustomSmallImageText",_argv[0])
+}
+
+DiscordCustomSet.CustomDetail
+{
+	DiscordCustomSet.base("OnDiscordPluginCustomDetail",_argv[0])
+}
+
+DiscordCustomSet.CustomState
+{
+	DiscordCustomSet.base("OnDiscordPluginCustomState",_argv[0])
+}
+
+// tESTING SOMETHING
+
+DiscordCustom.Attitude
+{
+	if !InDiscordPluginCustom
+	{
+		return
+	}
+	else
+	{
+		DiscordCustomSet.CustomState(drp_attitude)
+		--
+		DiscordCustomSet.LargeImageKey("base_img")
+	}
+}
+
+OnCheckDRPAttitude
+{
+	if ellVee == 1
+	{flowey_mood = "default"}
+	
+	--
+	case flowey_mood 
+	{
+		when "default"
+		{drp_attitude = OnGLITCH("* Howdy!")}
+		when "happy"
+		{drp_attitude = OnGLITCH("* Yes!")}
+		when "hurt"
+		{drp_attitude = OnGLITCH("* OW!")}
+		when "scared"
+		{drp_attitude = OnGLITCH("* No!")}
+		when "angry"
+		{drp_attitude = OnGLITCH("* Grr!")}
+	}
+
+	OnDiscordPluginCustom
+}
+

@@ -1,0 +1,415 @@
+﻿//	                   __  __
+//	                 ,',.\/,.`.
+//	                 \(_,''._)/
+//	                 ._(.||.)_,		                             
+//	                 (,>(__)<.)		   _____                     
+//	                 '`-.==,-'`		  |     | ___  _ _  ___  ___ 
+//	                     )(_		  | | | || . || | ||_ -|| -_|
+//	            _____ _.'   `-.		  |_|_|_||___||___||___||___|
+//	       _.-''    ,','|    \.\
+//	    ,-'         `-.`:  .  :\\_
+//	   /,::::, ,::::, ,>))._ ,' `'`
+//	  // ::::/ /::::/ /    )'/.
+//	 // ::::/ /::::/ /   ,',|`.\
+//	/______________/   /,'||'|))
+//	\ _ _ __ _ _ _ \,':(_ |('((__
+//	 \___(,.)SSt____\,|_)))_))`--`
+//	     /,'
+    
+
+
+// ---- OnMouseMove ----
+
+
+OnMouseMove
+{
+    case reference[3] 
+	{
+		when 0 
+		{
+			if reference[6] == "noPunching"
+			{
+				stroke = 91
+				MouseMoveSakura
+			}
+			else
+			{
+				MouseMoveSakura
+			}
+		}
+		when 1
+		{
+			" * KERO Error: %(errorMsg)"
+		}
+		others 
+		{
+			" * CHAR* Error: * %(errorMsg)"
+		}
+    }
+}
+
+
+// ---- MouseMoveSakura ----
+// The petting function for your main character.
+
+
+MouseMoveSakura
+{
+    case reference[4] 
+	{
+	when "Petals"
+	{
+		stroke++ 
+		if stroke >= 90
+		{	
+			if ellVee == 1
+			{
+				stroke = 0 //resetting the stroke count
+				petCount++
+				case petCount
+				{
+				when 1-10
+				{
+					
+					"\0\s[21]%(Flowey) * Stop. sssssssssssstop?  \_w[500]"
+					"\0\s[9]%(Flowey) * Pat. Pet. \![embed,OnGLITCH,pat]\![embed,OnGLITCH,pet]\![embed,OnGLITCH,pot]\![embed,OnGLITCH,pat]\![embed,OnGLITCH,pot]\![embed,OnGLITCH,pet].  \_w[500]"
+					"\0\s[21]%(Narrator) * (You get the feeling he might appreciate it more if you'd stop.) \_w[1000]\n[200](Or Not.)\_w[500]"
+					"\0\s[9]%(Narrator) * He seems to be enjoying this?\_w[500]"
+				}
+				when 11-50
+				{
+					"\0\s[9]%(Flowey) * Pat. Pet. \![embed,OnGLITCH,pat]\![embed,OnGlitchLite,pet]\![embed,OnGLITCH,pot]\![embed,OnGlitchLite,pat]\![embed,OnGlitchLite,pot]\![embed,OnGlitchLite,pet].  \_w[500]"
+					"\0\s[9]%(Narrator) * He seems to be enjoying this.\_w[500]"
+				}
+				when 50-100
+				{
+					"\0\s[9]%(Flowey) * Pat. \![embed,OnGlitchLite,pat]\![embed,OnGlitchLite,pet]\![embed,OnGlitchLite,pot]\![embed,OnGlitchLite,pat]\![embed,OnGlitchLite,pot]\![embed,OnGlitchLite,pet].  \_w[500]"
+					"\0\s[9]%(Narrator) * He's definitely enjoying this.\_w[500]"
+				}
+				others
+				{
+					"\0\s[9]%(Flowey) * Pat. patpetpotpatpotpet.  \_w[500]"
+					"\0\s[9]%(Narrator) * You've really pet him quite a lot, haven't you?\_w[500]"
+				}
+				}
+			}
+			else
+			{
+				stroke = 0 //resetting the stroke count
+				petCount++
+				petCountNeg++
+				case petCount
+				{
+				when 1-50
+				{
+					
+					"\0\s[21]%(Flowey) * Stop. sssssssssssstop?  \_w[500]"
+					"\0\s[9]%(Flowey) * Pat. Pet. \![embed,OnGLITCH,pat]\![embed,OnGLITCH,pet]\![embed,OnGLITCH,pot]\![embed,OnGLITCH,pat]"
+					"\0\s[21]%(Flowey) * Stop. sssssssssssstop?  \_w[500]\![embed,OnGLITCH,pet].  \_w[500]"
+					"\0\s[21]%(Narrator) * (You get the feeling he might appreciate it more if you'd stop.)\_w[500]"
+					"\0\s[9]%(Narrator) * He's not enjoying this.\_w[500]"
+				}
+				others
+				{
+					"\0\s[21]%(Narrator) * He's really not iterested. Can you blame him? \_w[500]"
+					"\0\s[21]%(Flowey) * Stop. sssssssssssstop. \![embed,OnGLITCH,Stop].  \_w[500]"
+				}
+				}
+			}
+		}
+	}
+	when "Face" 
+	{
+		rub++
+		if rub >= 120
+		{
+			rub = 0 //resetting the stroke count
+			meanvariable++
+			petCountNeg++
+			case petCountNeg
+			{
+			when 0-100
+			{
+				"\0\s[21]%(Flowey) * Stop. sssssssssssstop. Why. \![embed,OnGLITCH,face]? \_w[500]"
+				"\0\s[21]%(Narrator) * (You get the feeling he'd appreciate it more if you would \![embed,OnGlitchLite,stop] touching his face.) \_w[1500]"
+			}
+			others
+			{
+				meanvariable++
+				"\0\s[17]%(Flowey)\f[height,25] * \![embed,OnGlitchLite,stop].\![embed,OnGlitchLite,stop].\![embed,OnGlitchLite,stop].\![embed,OnGlitchLite,stop]\f[default] \_w[500]"
+				"\0\s[17]%(Narrator) * Does his anger amuse you? \_w[1500]"
+			}
+			}
+		}
+	}
+	others 
+	{
+		stroke = 0
+		rub = 0
+	}
+    }
+}
+
+
+ 
+// -------- OnMouseDoubleClick --------
+// Checks what button is clicking and which ghost body is being clicked on
+
+OnMouseDoubleClick
+{
+
+	if reference[5] == 0 //left button == 0 right button == 1
+	{
+		case reference[3] // sakura == 0, kero == 1, char2 == 2, etc
+		{
+		when 0 
+		{
+			if reference[6] == "punchHim"
+			{
+				agreedToConsequences ,= "punching"
+			}
+			--
+			MouseDoubleClickSakura
+		}
+		when 1
+		{
+			MouseDoubleClickKero
+		}
+		others 
+		{
+			" * OnMouseDoubleClick: %(errorMsg)"
+		}
+		}
+    }
+}
+
+
+// -------- MouseDoubleClickSakura --------
+// Effects of being double-clicked
+ 
+ 
+MouseDoubleClickSakura
+{
+
+ 	if reference[4] == "Face" //name of collision
+	{
+		if ASEARCH("punching",agreedToConsequences) == 0
+		{
+			_test = RAND(100)
+			case _test 
+			{
+			when 2,40,50,56,57,61-63,65,80,90
+			{
+				"\0\s[27]%(swipeSFX)\e"
+			}
+			others
+			{
+				if knifeTime >= 20
+				{
+					if killCount >= 5
+					{
+						EXP++
+						knifeTime = 0
+						killCount = 0
+						ellVee++
+						"\0\s[15]%(hitSFX)\_w[1500]\n[300]\s[-1]%(dustSFX)\_w[1500]"
+						--
+						"\1\s[-1]%(LVupSFX)\f[align,center] * YOU WIN! \_w[500]\e"
+					}
+					else
+					{
+						EXP++
+						knifeTime = 0
+						killCount++
+						"\0\s[15]%(hitSFX)\_w[300]\s[-1]\_w[2000]\s[21]%(savestateSFX)\_w[1000]\e"
+					}
+				
+				}
+				elseif knifeTime == 19
+				{
+					knifeTime++ 
+					EXP++
+					
+					"\0\s[24]\b8%(distortedLaughVFX)\n[200] * f_lowe_y is considering doing a violence. \_w[500]"
+					
+					"\0\s[18]%(Flowey)\b4\f[height,100]Die.\f[default]\_w[500]\e"
+					
+				}
+				elseif knifeTime >= 12
+				nonoverlap : {
+					knifeTime++
+					EXP++
+					
+					"\0\s[15]%(ackVFX) * \![embed,OnGLITCH,stop it]!\_w[500]"
+					
+					"\0\s[21]%(ohVFX) * \![embed,OnGLITCH,cut that out]!!\_w[500]"
+					
+					"\0\s[21]%(heyVFX) * \![embed,OnGLITCH,hey you]! \_w[500]"
+					
+					"\0\s[14]\1\s[-1]%(screechVFX)\n * (Scared noises)\n[200]\_w[500]"
+					
+					"\0\s[15]%(hitSFX)\_w[500]\e"
+				}
+				elseif knifeTime >= 6
+				nonoverlap : {
+					knifeTime++
+					EXP++
+					
+					"\0\s[16]%(ackVFX) * Ack! Why-\_w[500]"
+					"\0\s[15]%(ohVFX) * OW! You!\_w[500]"
+					"\0\s[16]%(heyVFX) * Hey! Stop! \_w[500]"
+					"\0\s[16]\1\s[-1]%(screechVFX)\n * (Angrier noises)\n[200]\_w[500]"
+					"\0\s[15]%(hitSFX)\_w[500]\e"
+				}
+				else
+				nonoverlap : {
+					knifeTime++
+					EXP++
+					
+					"\0\s[15]%(ackVFX) * Ack!\_w[500]"
+					"\0\s[12]%(ohVFX) * OW!\_w[500]"
+					"\0\s[12]%(heyVFX) * Hey! \_w[500]"
+					"\0\s[12]\1\s[-1]%(screechVFX)\n * (Angry noises)\n[200]\_w[500]"
+					"\0\s[15]%(hitSFX)\_w[500]\e"
+					
+				}
+				
+				--
+				
+				"\e"
+				"\n[350]\_w[1500]%(menuNarrator)\_q\f[color,250,0,0]\f[align,right] * (%(knifeTime))\f[color,default]\_w[1000]\e"
+			}
+			}			
+		}
+		else
+		{
+
+			"%(Narrator) * You have not commited any violence against %(callHim) \f[italic]\f[color,250,0,0]yet\f[default].\n[200] Continuing may put you on a path you cannot turn back from.\n[150]/
+			\![*]\q[Accept Consequences,OnMouseDoubleClick,172,208,0,0,Face,0,punchHim] \n \n[-100]\f[align,right] \![*]\q[Pet Him,OnMouseMove,129,137,0,0,Petals,0,noPunching]\n[150]\f[align,left]"
+		}
+ 	}
+	else
+ 	{
+ 		OpenSakuraMenu
+	}
+ }
+
+MouseDoubleClickKero
+{
+	
+	" * MouseDoubleClickKero: %(errorMsg)\e"
+}
+
+// ----OnMouseWheel----
+// When the wheel of a mouse moves
+
+OnMouseWheel
+{
+	if reference[4] == "Face"
+	{
+		flickCount++
+		meanvariable++
+		"\0\s[27]%(swipeSFX)\e" //\n\f[height,100]\f[color,255,0,0] MISS\f[default]
+	}
+}
+
+
+// ----OnMouseDragStart----
+// When dragging of ghost starts
+
+OnMouseDragStart
+{
+	if !talkCheck
+	{"%(encounterSFX)"}
+}
+
+
+// ----OnMouseDragEnd----
+// When dragging of ghost ends.
+
+OnMouseDragEnd
+{
+	if !talkCheck
+	{"%(battlestartSFX)"}
+}
+
+
+OnMouseDownEx
+{
+	case reference[5]
+	{
+	when "middle"
+	{
+		"\s[26]\i[0]"
+		// "Mouse Wheel/Middle"
+	}
+	when "xbutton1"
+	{
+		"\s[27]"
+		// "Extended Button 1"
+	}
+	when "xbutton2"
+	{
+		"\s[29]%(shortLaughGlitchVFX)"
+		// "Extended Button 2"
+	}
+	}
+}
+
+
+// Occurs when mouse buttons other than left and right are pressed.
+
+// Reference0
+// X coordinate (local coordinate) of the mouse cursor
+// Reference1
+// The y coordinate (local coordinate) of the mouse cursor
+// Reference2
+// Always 0.
+// Reference3
+// 0 for the main body, 1 for the companion. There are also 2 and later in SSP / CROW.
+// Reference4
+// Collision detection identifier.
+// Reference5
+// Wheel clicks (or 3 button mouse middle buttons) are middle, extended button 1 (usually assigned to "back") is xbutton1, and extended button 2 (usually assigned to "forward") is xbutton2.
+// Reference6
+// After windows7, input from the touch panel (* touch pad is not possible) in a multi-touch compatible environment is touch, input from the mouse etc. is mouse
+
+
+
+// ---- Some of these are questionable but being preserved <3 Era
+
+
+
+//----OnMouseEnter----
+// When the mouse enters any collision area of the ghost.
+
+// OnMouseEnter
+// {
+	// "\0\s[3]\![sound,play,trill.wav,--volume=%(volume),--window=false]OnMouseEnter Test.\e"
+// }
+	
+//----OnMouseEnterAll----
+// When the mouse enters the outermost boundary of the ghost.
+
+// OnMouseEnterAll
+// {
+	// "\0\s[3]\![sound,play,trill.wav,--volume=%(volume),--window=false]I am currently fuctional.\e"
+// }
+
+//----OnMouseLeave----
+// When the mouse leaves any collision area of the ghost.
+
+// OnMouseLeave
+// {
+	// "\0\s[3]\![sound,play,trill.wav,--volume=%(volume),--window=false]OnMouseLeave Test.\e"
+// }
+
+//----OnMouseLeaveAll----
+//When the mouse leaves the outermost boundary of the ghost.
+
+// OnMouseLeaveAll
+// {
+	// "\0\s[3]\![sound,play,trill.wav,--volume=%(volume),--window=false]OnMouseLeaveAll Test.\e"
+// }
+
+

@@ -1,0 +1,562 @@
+// ---- Open Program Commentary ----
+// ----<3 Era 11/23/2021----
+//Inspired by code by Zarla-s and Zichqec, with direct assistance from the latter in figuring out how to make this do what I wanted. 
+//It's a work in progress, doesn't work the way I want, and may very well be replaced entirely later
+
+
+	
+OnDesktopEyeball 
+{
+	//The number of open windows will be stored in _num
+	_num = FUNCTIONEX("window_info.dll")
+	//A string containing the names of all open windows separated by commas will be stored in OpenWindows
+	OpenWindows = valueex
+	--
+	// if eraDebug == "ON"
+	// {
+				// Displays open windows, for debug
+				// _display = REPLACE("%(OpenWindows)",",","\n[150]")
+				// "\_q\b2%(_display)\n[200]"
+	// }
+	// else
+	{
+		"\0\s[3]%(Narrator) * (f_lowe_y looks at your computer.)\n[200]"
+		"\0\s[3]%(Flowey) * Strange. \n[200]"
+		--
+		//calls commentary
+		AppView
+	}
+	--
+	"\e"
+}
+
+
+AppView : nonoverlap
+{ 
+
+	// calcWindow;fileExplorer;taskManager;myuTorrent;GitHub;
+	// Discord;videoZoom;Twitch;openBroadcast;
+	// Firefox;Brave;Chrome;Edge;
+	// codeBlocks;VisualStudio;ghidraDecomp;Ghidra;resourceHacker;lSpiro;
+	// plusNotepad;wordPad;notePad;Scrivener;
+	// Paint;Sai1;Sai2;mediBang;fireAlpaca;Gimp;Blender
+	// iTunes;vlcMP;Winamp;winMedia;musicBee;Spotify;Audacity;flStudio;amazingMIDI;
+	// Steam;steamChat;nutDealer;blueStacks;mcLauncher;mineCraft;originLaunch;eaLauncher;
+}
+		
+		//Template for adding additional programs to watchlist. 
+		//Change "requestName" to something relevent and unique. Add to AppView list above, followed by semicolon ";"
+		//Change "Program" in RE_ASEARCH() to a substring found within the window caption. The more unique to that program, the better.
+		//Change "WindowClass" to the window class of the desired program.
+		
+/* 		
+requestName
+{
+	if RE_ASEARCH("Program",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Program",OpenWindows) 
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","WindowClass") == 1
+		{
+			"Program Open"
+		}
+		else
+		{
+			"Program Minimised"
+		}
+	}
+}
+*/
+
+
+
+fileExplorer
+{
+	if RE_ASEARCH("File Explorer",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("File Explorer",OpenWindows) 
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","CabinetWClass") == 1
+		{
+			"File Explorer Open"
+		}
+		else
+		{
+			"File Explorer Minimised"
+		}
+	}
+}
+
+
+// ---- ChromeWidgetWin1 ----
+webBrowser
+{
+	""
+}
+
+Brave
+{
+	if RE_ASEARCH("Brave",OpenWindows) != -1
+	{
+		caption = RE_ASEARCH("Brave",OpenWindows)
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Chrome_WidgetWin_1") == 1
+		{
+			"Brave Browser Open"
+		}
+		else
+		{
+			"Brave browser minimised.)"
+		}
+	}
+}
+	
+Chrome
+{
+	if RE_ASEARCH("Chrome",OpenWindows) != -1
+	{
+		caption = RE_ASEARCH("Brave",OpenWindows)
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Chrome_WidgetWin_1") == 1
+		{
+			"Chrome is open"
+		}
+		else
+		{
+			"Chrome is minimised\n"
+		}
+	}
+}
+
+Edge
+{
+	if RE_ASEARCH("Edge",OpenWindows) != -1
+	{
+		caption = RE_ASEARCH("Edge",OpenWindows)
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Chrome_WidgetWin_1") == 1
+		{
+			"Edge is Open"
+		}
+		else
+		{
+			"Edge is minimised\n"
+		}
+	}
+}
+
+GitHub
+{
+	if RE_ASEARCH("GitHub",OpenWindows) != -1
+	{
+		caption = RE_ASEARCH("GitHub",OpenWindows)
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Chrome_WidgetWin_1") == 1
+		{
+			"GitHub Desktop Open"
+		}
+		else
+		{
+			"GitHub Desktop minimised"
+		}
+	}
+}
+	
+Discord
+{
+	if RE_ASEARCH("Discord",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Discord",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Chrome_WidgetWin_1") == 1
+		{
+			"%(discordOpen)"
+		}
+		else
+		{
+			"%(discordMin)"
+		}
+	}
+}
+
+Twitch
+{
+	if RE_ASEARCH("Twitch",OpenWindows) != -1
+	{
+		caption = RE_ASEARCH("Twitch",OpenWindows)
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Chrome_WidgetWin_1") == 1
+		{
+			"Twitch Open"
+		}
+		else
+		{
+			"Twitch minimised"
+		}
+	}
+}
+
+
+	
+	//----Browsers----
+
+Firefox
+{
+	if RE_ASEARCH("Firefox",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Firefox",OpenWindows) 
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","MozillaWindowClass") == 1
+		{
+			"Firefox Open"
+		}
+		else
+		{
+			"Firefox minimised"
+		}
+	}
+}
+
+
+
+	//----Programming/IDEs----
+
+
+VisualStudio
+{
+	if RE_ASEARCH("Visual Studio",OpenWindows) != -1
+	{
+		caption = RE_ASEARCH("Visual Studio",OpenWindows)
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Chrome_WidgetWin_1") == 1
+		{
+			"Visual Studio Open.\n"
+		}
+		else
+		{
+			"Visual Studio minimised.\n"
+		}
+	}
+}
+
+
+lSpiro
+{
+	if RE_ASEARCH("L. Spiro",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("L. Spiro",OpenWindows) 
+		gameCheat = FUNCTIONEX("findwin.dll","getcaption","%(OpenWindows[caption])","Calc")
+		
+		if RE_ASEARCH("DELTARUNE",gameCheat) != -1
+		{
+			"I see what you're doing, Lightner."
+		}
+		elseif RE_ASEARCH("UNDERTALE",gameCheat) != -1
+		{
+			"Amazing what you can do with a little DETERMINATION."
+		}
+		else	
+		{
+			if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Calc") == 1
+			{
+				"L. Spiro Memory Hacking Software Open"
+			}
+			else
+			{
+				"L. Spiro Memory Hacking Software minimised"
+			}
+		}
+	}
+}
+	
+	//----Text Editors----
+	
+plusNotepad
+{
+	if RE_ASEARCH("Notepad++",OpenWindows) != -1
+	{
+		caption = RE_ASEARCH("Notepad++",OpenWindows)
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Notepad++") == 1
+		{
+			if RE_ASEARCH("SSP",caption)
+			{
+				if RE_ASEARCH("f_lowe_y",caption)
+				{
+					"..."
+				}
+				else
+				{
+					"What... What is this?\n[200]&(username)?"
+				}
+			}
+			else
+			{
+				"Notepad++ is open\n"
+			}
+		}
+		else
+		{
+			"Notepad++ is Minimised\n"
+		}
+	}
+}
+	
+
+Paint
+{
+	if RE_ASEARCH("Paint",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Paint",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","MSPaintApp") == 1
+		{
+			"Paint Open"
+		}
+		else
+		{
+			"Paint minimised"
+		}
+	}
+}
+
+
+
+mediBang
+{
+	if RE_ASEARCH("MediBang",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("MediBang",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Qt5QWindowIcon") == 1
+		{
+			"MediBang Paint Pro Open"
+		}
+		else
+		{
+			"MediBang Paint Pro minimised"
+		}
+	}
+}
+
+fireAlpaca
+{
+	if RE_ASEARCH("FireAlpaca",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("FireAlpaca",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Qt5QWindowIcon") == 1
+		{
+			"FireAlpaca Open"
+		}
+		else
+		{
+			"FireAlpaca minimised"
+		}
+	}
+}
+
+Gimp
+{
+	if RE_ASEARCH("GNU Image",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("GNU Image",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","gdkWindowToplevel") == 1
+		{
+			"GIMP Open"
+		}
+		else
+		{
+			"GIMP minimised"
+		}
+	}
+}
+
+
+	
+	//----Music----
+
+iTunes
+{
+	if RE_ASEARCH("iTunes",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("iTunes",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","iTunes") == 1
+		{
+			"iTunes Open"
+		}
+		else
+		{
+			"iTunes minimised"
+		}
+	}
+}
+
+vlcMP
+{
+	if RE_ASEARCH("VLC",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("VLC",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","wxWindowClassNR") == 1
+		{
+			"VLC Media Player Open"
+		}
+		else
+		{
+			"VLC Media Player minimised"
+		}
+	}
+}
+
+Winamp
+{
+	if RE_ASEARCH("Winamp",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Winamp",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Winamp v1.x") == 1
+		{
+			"Winamp Open"
+		}
+		else
+		{
+			"Winamp minimised"
+		}
+	}
+}
+
+winMedia
+{
+	if RE_ASEARCH("Windows Media Player",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Windows Media Player",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","WMPlayerApp") == 1
+		{
+			"Windows Media Player Open"
+		}
+		else
+		{
+			"Windows Media Player minimised"
+		}
+	}
+}
+
+musicBee
+{
+	if RE_ASEARCH("MusicBee",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("MusicBee",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","WindowsForms10.Window.8.app.0.2bf8098_r7_ad1") == 1
+		{
+			"MusicBee Open"
+		}
+		else
+		{
+			"MusicBee minimised"
+		}
+	}
+}
+
+Spotify
+{
+	if RE_ASEARCH("Spotify",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Spotify",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","Chrome_WidgetWin_0") == 1
+		{
+			"Spotify Open"
+		}
+		else
+		{
+			"Spotify minimised"
+		}
+	}
+}
+	
+	
+	//----Games & Emulators----
+	
+Steam
+{
+	if RE_ASEARCH("Steam",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Steam",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","vguiPopupWindow") == 1
+		{
+			"Steam Open"
+		}
+		else
+		{
+			"Steam minimised"
+		}
+	}
+}
+
+steamChat
+{
+	if RE_ASEARCH("Steam Chat",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Steam Chat",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","SDL_app") == 1
+		{
+			"Steam Chat Open"
+		}
+		else
+		{
+			"Steam Chat minimised"
+		}
+	}
+}
+	//Undertale/Deltarune
+nutDealer
+{
+	if RE_ASEARCH("Undertale",OpenWindows) != -1 
+	{
+		caption = RE_ASEARCH("Undertale",OpenWindows) 
+		
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","YYGameMakerYY") == 1
+		{
+			"Undertale Open"
+		}
+		else
+		{
+			"Undertale minimised"
+		}
+	}
+	elseif RE_ASEARCH("Deltarune",OpenWindows) != -1
+	{
+		caption = RE_ASEARCH("Deltarune",OpenWindows) 
+		if FUNCTIONEX("findwin.dll","count","%(OpenWindows[caption])","YYGameMakerYY") == 1
+		{
+			"Deltarune Open"
+		}
+		else
+		{
+			"Deltarune minimised"
+		}
+	}
+}
+
+
+
+//----Envelopes for multi-option or mode-dependent responses
+
+
+	
+discordOpen
+{
+	"An interesting method for maintaining a social life..."
+}
+
+discordMin
+{
+	"Hmmm... Can't see what anyone is saying like this."
+}
+
+braveOpen
+{
+	"Browsing the web, are we?"
+}
+
+braveMin
+{
+	"(%(knownName) looks at your browser on the taskbar.)\nAlways good to take a break from things"
+}

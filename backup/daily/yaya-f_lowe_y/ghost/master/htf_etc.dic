@@ -1,0 +1,1134 @@
+﻿// -------- Miscellaneous Functions --------
+
+
+
+// -------- Things specifically added by Era --------
+
+// ----- OnCalcMood -----
+// Should calculate current mood based on how many moodlet flags have been triggered, most flags wins
+
+OnCalcMood : void
+{
+	_mood = IARRAY
+
+	_hap = ASEARCHEX("happyness",extraMood)
+	_mood[0] = ARRAYSIZE(_hap)
+	
+	_sur = ASEARCHEX("surprise",extraMood)
+	_mood[1] = ARRAYSIZE(_sur)
+	
+	_rev = ASEARCHEX("revulsion",extraMood)
+	_mood[2] = ARRAYSIZE(_rev)
+	
+	_sad = ASEARCHEX("sadness",extraMood)
+	_mood[3] = ARRAYSIZE(_sad)
+	
+	_ang = ASEARCHEX("anger",extraMood)
+	_mood[4] = ARRAYSIZE(_ang)
+	
+	_fea = ASEARCHEX("fear",extraMood)
+	_mood[5] = ARRAYSIZE(_fea)
+	
+	_final = ASORT('int,ascending,index',_mood)
+	
+	if _final[0] == 5
+	{curMood = "happyness"}
+	elseif _final[1] == 5
+	{curMood = "surprise"}
+	elseif _final[2] == 5
+	{curMood = "revulsion"}
+	elseif _final[3] == 5
+	{curMood = "sadness"}
+	elseif _final[4] == 5
+	{curMood = "anger"}
+	elseif _final[5] == 5
+	{curMood = "fear"}
+	else
+	{curMood = "other"}
+	
+}
+
+
+// ----- SANITISE -----
+// Strips out punctuation that would interrupt any of the functions
+
+SANITISE
+{
+	_clean = REPLACE(_argv[0],"'",CHR(39)) //Converts apostrophes/single quotes
+	_clean = REPLACE(_clean,'"',CHR(34)) //Converts double quotes
+	_clean = REPLACE(_clean,",",CHR(44)) //Converts commas
+	
+	"%(_clean)"
+}
+
+//As the name implies, this checks if the balloon is currently open or not. This was written by Levidre, and modified a bit by Zi.
+
+balloonCheck
+{
+    if ASEARCH("Status",var.req.key) != -1
+    {
+        _currentstatus = var.req.value[ASEARCH("Status",var.req.key)]
+        if "balloon" _in_ _currentstatus; 1
+        else; 0
+    }
+    else; 0
+}
+
+//Modified from above
+talkCheck
+{
+    if ASEARCH("Status",var.req.key) != -1
+    {
+        _currentstatus = var.req.value[ASEARCH("Status",var.req.key)]
+        if "talking" _in_ _currentstatus || "choosing" _in_ _currentstatus; 1
+        else; 0
+    }
+    else; 0
+}
+
+
+// ---- OnOtherGhostTalk ----
+// Activates after another ghost completes a script. 
+// ref0 = Ghost name, ref1 = body name, ref 2 = ???, ref3 = called function, ref4 = script, ref5 = other arguments
+
+
+OnOtherGhostTalk
+{
+	case reference[2]
+	{
+	when "communicate"
+	{
+		if "f_lowe_y" _in_ reference[4] || "f_lowe_y" _in_ reference[5] {}
+		else {}
+	}
+	when "break" {}; when "notranslate" {}; when "owned" {}; when "remote" {}
+	when "sstp-send" {}; when "plugin-script" {}; when "plugin-event" {}
+	others
+	{
+		// "%(refTest)\x"
+		--
+		if reference[3] == "OnSurfaceRestore" {}
+		else
+		{
+			reference[4] = REPLACE(reference[4], "\![sound,play,", "\![sound,stop,")
+			reference[4] = REPLACE(reference[4], "\e", "")
+			_spokenWord = TOLOWER(reference[4])
+			
+			if "flowey" _in_ _spokenWord || "f_lowe_y" _in_ _spokenWord
+			{
+				// "%(_spokenWord)"
+				"\s[6]%(Narrator) * The flower seems to be smiling at the sound of his name.)"
+			}
+			elseif "asriel" _in_ _spokenWord
+			{
+				"\s[11]%(Flowey) * No no no no no nono%(n_)onono%(n_)%(o_)%(n_)%(o_)no%(n_)%(o_)nono"
+			}
+			elseif "alphys" _in_ _spokenWord
+			{
+				"\s[21]%(Flowey) * Her?\s[0]\i[2]\_w[500]"
+			}
+			elseif "toriel" _in_ _spokenWord
+			{
+				"\s[14]%(Flowey) * HER...\_w[500]"
+			}
+			elseif "asgore" _in_ _spokenWord
+			{
+				"\s[14]%(Flowey) * ...\_w[500]"
+			}
+			else
+			{
+				// "%(refTest)"
+			}
+			--
+			// "\e"
+		}
+	}
+	}
+}
+
+//----Moved from other dics----
+ //--OnKeyPress
+ //This defines the hotkeys your ghost will use.
+ 
+OnKeyPress
+{
+	if reference[0] == "t"
+	{
+		OnAiTalk
+	}
+	elseif reference[0] == "r"
+	{
+		OnLastTalk
+	}
+	elseif reference[0] == "f4"
+	{
+		OnClose
+	}
+	elseif reference[0] == "f1"
+	{
+		"\![open,readme]"
+	}
+	elseif reference[0] == "o"
+	{
+	}
+}
+
+
+//---- Username ----
+On_username
+{
+	username
+}
+
+//---- Get other active ghost names -------------------------------------------------------
+On_otherghostname
+{
+	// Create a list of currently active ghosts
+	ghostexlist = ""
+	_i = 0
+	while _i >= 0 
+	{
+		_ghostname = NAMETOVALUE("reference%_i")
+		if _ghostname != "" 
+		{
+			if _i > 0; ghostexlist += ","
+			ghostexlist += _ghostname[0]
+			_i++
+		}
+		else; _i = -1
+	}
+	ghostexcount = ARRAYSIZE(ghostexlist)
+}
+
+On_basewareversion
+{
+	bwVersion = reference[0]
+	bodyVersion = reference[1]
+	bwVersionEX = reference[2]
+}
+
+//---- SHIORI Information ------------------------------------------------------------------
+// On_version
+// {
+	// GETSETTING(AYAINFO_VERSION)
+// }
+
+// On_craftman
+// {
+	// "umeici"
+// }
+
+// On_craftmanw
+// {
+	// "梅市"
+// }
+
+// On_name
+// {
+	// "AYA"
+// }
+
+//---- Owned SSTP made with uniqueid ------------------------------------------------------
+On_uniqueid
+{
+	uniqueid = reference[0]
+}
+
+//----hwnd Get ------------------------------------------------------------------------
+On_hwnd
+{
+	sakurahwnd    = reference0[0]
+	kerohwnd      = reference0[1]
+	sakurablnhwnd = reference1[0]
+	keroblnhwnd   = reference1[1]
+}
+
+
+
+// -------- Plugin Responses --------
+
+// ----------------------------------
+// ---- Discord Plugin by steve
+// moved relevent code to htf_richpresence.dic
+
+// -------- SAORI_CPUID --------
+// CPU related
+// 
+
+OnRunCPUID
+{
+		// OS related
+	_platform = FUNCTIONEX("saori_cpuid.dll","platform")
+	_os_name = FUNCTIONEX("saori_cpuid.dll","os.name")
+	_os_version = FUNCTIONEX("saori_cpuid.dll","os.version")
+	_os_version_int = TOINT(_os_version)
+	_os_build = FUNCTIONEX("saori_cpuid.dll","os.build")
+	
+		//CPU related
+	_cpu_name = FUNCTIONEX("saori_cpuid.dll","cpu.name")
+
+	_cpu_clockex = FUNCTIONEX("saori_cpuid.dll","cpu.clockex")//(MHz)
+	
+	
+	"\0\s[3]\b[2]\_q\![set,autoscroll,disable]"
+	--
+	"\f[color,#FFFF00]OS:\f[default] %(_os_name) v.%(_os_version_int) \n\f[color,#FFFF00]Build #:\f[default]%(_os_build) \n[150]"
+	--
+	"\f[color,#FFFF00]CPU:\f[default] %(_cpu_name) \n\f[color,#FFFF00]Clock Rate:\f[default] %(_cpu_clockex)MHz\n[150]"
+	--
+	_memTP = TOREAL(memorytotalphys)
+	_memTPKB = _memTP/1024
+	_memTPMB = _memTPKB/1024
+	_memTPGB = _memTPMB/1024
+	_memTPGB = TOSTR(_memTPGB)
+	_totalPhysMemGB = SUBSTR(_memTPGB,0,4)
+	
+	_memAP = TOREAL(memoryavailphys)
+	_memAPKB = _memAP/1024
+	_memAPMB = _memAPKB/1024
+	_memAPGB = _memAPMB/1024
+	_memAPGB = TOSTR(_memAPGB)
+	_availablePhysMemGB = SUBSTR(_memAPGB,0,4)
+
+	"\f[color,#FFFF00]Memory Load:\f[default] %(memoryload)% \n\f[color,#FFFF00]Total PhysMemory:\f[default] \n%(memorytotalphys) Bytes \n%(_totalPhysMemGB) GiB \n\f[color,#FFFF00]Available PhysMemory:\f[default] \n%(memoryavailphys) Bytes \n%(_availablePhysMemGB) GiB\n[150]"
+	--
+	"\f[color,#FFFF00]Ukagaka:\f[default] \n%(basewarename): %(bwVersionEX)"
+	--
+	if eraDebug == "ON"
+	{"\n%property[baseware.version]"}
+	--
+	"\x\e"
+}
+
+// -------- Recycling Bin --------
+
+OnRecycleStart
+{
+	
+	_binNum = FUNCTIONEX("gomi.dll", "-n")
+	_binSizeB = TOINT(valueex[0])
+	_binSizeK = (_binSizeB / 1024); _binSizeM = (_binSizeK / 1024); _binSizeG = (_binSizeM / 1024)
+	_type = ""
+	_binDisplay = 0
+	if _binSizeG >= 5 {_binDisplay = _binSizeG; _type = "GB"}
+	elseif _binSizeM >= 100 {_binDisplay = _binSizeM; _type = "MB"}
+	elseif _binSizeK >= 100 {_binDisplay = _binSizeK; _type = "KB"}
+	else{_binDisplay = _binSizeB; _type = "bytes"}
+	--
+	if _binNum == 0 //If the recycle bin is empty.
+	{
+		"\0\s[-1]\_w[1000]\_w[1000]\s[3]%(Flowey)* IT IS EMPTY.\e"
+	}
+	elseif _binNum == 1 //If the recycle bin has 1 item
+	{
+		"\0\s[3]%(Narrator) There is %(_binNum) item, using %(_binDisplay)%(_type) of space. \_w[1000]\n/
+		 \f[align,center]Proceed?\n	\![*] \f[align,left]\q[Yes,RecycleEmpty]\n \n[-100]\f[align,center]--------\n \n[-100]\f[align,right] \![*] \q[No,RecycleCancel]\n[150]\f[align,left]"
+	}
+	elseif _binNum >= 2 //If the recycle bin has anything in it.
+	{
+		"\0\s[3]%(Narrator) There are %(_binNum) items, using %(_binDisplay)%(_type) of space. \_w[1000]\n/
+		 Proceed?\n/
+		\![*] \q[Yes,RecycleEmpty] \n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \![*] \q[No,RecycleCancel]\n[150]\f[align,left]"
+	}
+}
+	
+
+Select.RecycleEmpty
+{
+	"\0\s[3]%(Flowey)\n * \![embed,OnGLITCH,Emptying]... \_w[1000]\s[-1]\_w[1000]\![raise,OnRecycleBinEmptied]"	
+}
+
+Select.RecycleCancel
+{	
+	"\0\s[21]%(Flowey)\n * Then what\![embed,OnGLITCH,what]WHAT\![embed,OnGLITCH,what]what did you do this for?\e"
+}
+
+OnRecycleBinEmptied
+{	
+	if verBalete == "OFF"
+	{
+		_gomi = FUNCTIONEX("gomi.dll", "-fq")
+	}
+	else
+	{
+		_gomi = FUNCTIONEX("gomi.dll", "-ev")
+	}
+	--
+	"\_w[500]\_w[500]\_w[500]\s[6]%(Flowey)\n[200] * Done."
+}
+
+
+
+//---- Other Functions----
+
+//--OnFileDrop2
+
+//OnFileDrop2 handles how your ghost will set an image as the desktop background when someone drags and drops an image on them.
+
+OnFileDrop2
+{
+	_filepath = SPLITPATH(reference[0])
+	_filename = _filepath[2]
+	_fileext = TOLOWER(_filepath[3])
+	case _fileext
+	{
+		when ".jpg", ".jpeg", ".bmp", ".png" //These are the formats your ghost will recognize as image files to set as the background.
+		{
+			Wallpaperfile = reference[0]
+			
+			"\0\s[3]%(Flowey) *  FILE %(_filename)%(_fileext). Wallpaper?\n[150]/
+			\q[Centered,SetWallpaper_0]\n/
+			\q[Tiled,SetWallpaper_1]\n/
+			\q[Stretched,SetWallpaper_2]\n[150]/
+			\q[No thanks,SetWallpaper_Cancel]\e"
+		}
+		when ".mid", ".wav", ".mp3", ".wma", ".au", ".ogg" //Audio file formats
+		{
+			"\0\s[3]%(Flowey) * %(_filename)%(_fileext) is music.\e"
+		}
+		others //Any other file format. 
+		{
+			"\0\s[3]%(Flowey) *  %(_filename)%(_fileext).\e"
+		}
+	}
+}
+
+//This set of options sets the wallpaper up.
+
+Select.SetWallpaper_0
+{
+	"\![set,wallpaper,%(Wallpaperfile),center]\0\s[3]%(Flowey) *  Centered.\e"
+}
+Select.SetWallpaper_1
+{
+	"\![set,wallpaper,%(Wallpaperfile),tile]\0\s[3]%(Flowey) *  Tiled.\e"
+}
+Select.SetWallpaper_2
+{
+	"\![set,wallpaper,%(Wallpaperfile),stretch]\0\s[3]%(Flowey) *  Stretched.\e"
+}
+Select.SetWallpaper_Cancel
+{
+	"\0\s[3]%(Flowey) *  No. No. No wallpaper.\e"
+}
+
+
+ //---- OnInstallBegin -------------------------------------------------------
+ //OnInstallBegin is called when a file with an included install.txt is dropped on your ghost. 
+ 
+OnInstallBegin
+ {
+	"\0\s[3]%(Flowey) *  Contains an install.txt file. Installing.\e"
+ }
+
+ //---- OnInstallComplete -------------------------------------------------------
+ //OnInstallComplete runs once the file above has finished installing.
+ 
+OnInstallComplete
+{
+	"\0"
+ 	--
+	if reference[0] == "shell" //This is checking to see if what you installed is classified as a shell in the install.txt.
+ 	{	
+		if reference[1] == "Flowey" //This is the name of the shell defined in descript.txt in the shell folder.
+		{
+		"\s[3]%(Narrator) * (You installed a new shell for a little yellow flower.)\e"
+		//Replace if needed.
+		}
+		else //For any other shell they may install.
+		{
+		"\s[3]%(Flowey) * New shell. New. New. New. New. \_w[500]\0\s[3]Shell: %(reference1).\e"
+		//%(reference1) here would be the name of the shell they installed. Replace if needed.
+		}
+ 	}
+	elseif reference[0] == "ghost" //if the type of the file they're installing is a ghost.
+ 	{
+		"\s[3]%(Flowey) * New Ghost.\_w[500] Installed %(reference1).\e"
+		//Reference1 here would be the name of the ghost. Replace as needed.
+ 	}
+	elseif reference[0] == "balloon" //if the type of file is a balloon
+ 	{
+		"\s[3]%(Flowey) * Balloon \_w[500] Name: %(reference1).\e"
+		//Reference1 here would be the name of the balloon. Replace as needed.
+ 	}
+	elseif reference[0] == "plugin" //if the type of file is a plug-in, like a saori of some kind.
+ 	{
+		"\s[3]%(Flowey) * Installed plug-in %(reference1).\e"
+		//Reference1 here would be the name of the plug-in. Replace as needed.
+ 	}
+}
+
+//---- OnInstallFailure -------------------------------------------------------
+//If the file you dropped fails to install for one reason or another.
+
+OnInstallFailure
+{
+	"\0\s[3]%(Flowey) * Failed. Unable to install. \n[150]"
+	
+	--
+	if reference[0] == "unsupported" //This checks if the reason it failed is because it was unsupported.
+	{
+	"\s[11]%(Flowey) * Can't.\_w[500]"
+	"%(Narrator) * (The filetype was not supported.) \_w[500]"
+	}	
+	elseif reference[0] == "extraction" //This checks if the file didn't extract properly.
+	{
+	"\s[11]%(Flowey) * Unable to extract.\_w[500]"
+	"%(Narrator) * (Unable to extract file.) \_w[500]"
+	//See above but for a failed extraction.
+	}
+}
+ 
+ //--OnInstallRefuse
+ //If the file you dropped can't be installed with this ghost.
+ 
+OnInstallRefuse
+ {
+	"\0\s[3]%(Flowey) * %(nonono) \_w[500]Can't can't can't. \_w[500]Try %(reference[0]).\_w[500]"
+	"\0\s[3]%(Narrator) * f_lowe_y refused to install the file. Maybe you should try giving it to %(reference[0]) instead? \_w[500]"
+	
+	//reference[0] in this function refers to the ghost this file is associated with, probably the name of the ghost listed in its install.txt file. You would see this if you dropped a shell made for a different ghost on your current ghost, for example.
+ }
+
+
+//**** Uninstallation ******************************************
+//You may have noticed in the configuration menus in menu.dic an option to turn Uninstall on or off, as well as a greyed out option to uninstall in the right click menu.
+
+//--OnVanishSelecting
+//When you select the uninstall option in the menu.
+
+OnVanishSelecting
+{
+	"\0\s[3]%(Flowey) * Whatever. \_w[500]"
+	"\0\s[3]%(Narrator) * (Delete f_lowe_y.exe? Y/N?) \_w[500]"
+}
+
+//OnVanishSelected
+//When you decide to uninstall them. 
+
+OnVanishSelected
+{
+	"\0\s[3]%(Flowey) * Goodbye %(username). \_w[500]\s[-1]\e"
+	"\0\s[3]%(Narrator) * (Deleting f_lowe_y.exe) \_w[500]\s[-1]\e"
+}
+
+
+//--OnVanishCancel
+//If you select Uninstall from the menu, but decide not to do it.
+
+OnVanishCancel
+{
+	"\0\s[3]%(Flowey) * %(thank)\_w[1000]\e"
+	"\0\s[3]%(Narrator) * (You did the right thing.) \_w[500]\s[-1]\e"
+}
+
+//--OnVanishButtonHold
+//This should trigger if you double click the ghost's balloon in the middle of OnVanishSelected above. So it basically cancels their uninstallation. I'd be pretty careful about testing this, and I'd probably just put the line of dialogue into their script input and test it that way instead.
+
+OnVanishButtonHold
+{
+	"\0\s[3] * ...\8\_w[500]\8\_w[500]\8\_w[500]\e"
+}
+
+
+ //---- OnVanished -----------------------------------------
+ //OnVanished is a weird little function. Basically, if you uninstall a ghost, it'll automatically go back to the last ghost you were using. They'll then say this line of dialogue about the ghost you just uninstalled. Make sure to set up both their poses immediately so they both appear when it switches back to them.
+ 
+OnVanished
+{
+	"\0\s[0]\1\[10] What a shame...\_w[1000]\_w[1000]\e"
+	
+	//reference[0] here is the name of the other ghost.
+}
+
+OnOtherGhostVanished
+{
+	"\0\s[14]%(Narrator) * (Is this the last we'll see of %(reference[0])?\_w[500]"
+	"\0\s[14]%(Flowey) * %(reference[0]) %(reference[0]) %(reference[0]) %(reference[0])\_w[1000]\n[200]   Uninstalled."
+}
+
+
+//**** Mail Checking *******************************************************************
+//The next set of functions have to do with checking your email.
+
+
+ //---- OnBIFFBegin ---------------------------------------------------------------
+ //When you first tell the ghost to check your email.
+ 
+OnBIFFBegin
+ {
+	"\0\s[5]%(Flowey) * Check_ng... ma_l. \_w[1500]\e"
+	"\0\s[5]%(Narrator) * (f_lowe_y is checking your email.) \_w[1500]\e"
+ }
+
+ 
+ //---- OnBIFFComplete ---------------------------------------------------------------
+ //After they've succeeded in checking your mail, they'll report back with how many new emails you have.
+ 
+OnBIFFComplete
+{
+	if reference[0] == 0 //If you have no new mail.
+ 	{
+ 		"\0\s[5]%(Flowey) * N_th_ng.. \_w[1500]\e"
+		"\0\s[5]%(Narrator) * (You have no new emails.) \_w[1500]\e"
+	}
+	elseif reference[0] == 1 //If you have one new email.
+ 	{
+ 		"\0\s[5]%(Flowey) * 1! N_w _mail. \_w[1500]\e"
+		"\0\s[5]%(Narrator) * (You have one new email.) \_w[1500]\e"
+	}
+	elseif reference[0] > 1 && reference[0] < 11 //If you have more than one email but less than eleven.
+	{
+		"\0\s[5]%(Flowey) * %(reference[0])! ne_ ema_ls. \_w[1500]\e"
+		"\0\s[5]%(Narrator) * (You have %(reference[0]) new emails.) \_w[1500]\e"
+		//reference[0] here stores the amount of new email it finds.
+	}
+	elseif reference[0] > 100 //If there are over one hundred new emails.
+	{
+		"\0\s[5]%(Flowey) * %(reference[0]) emails. \_w[1500]\e"
+		"\0\s[5]%(Narrator) * (You have %(reference[0]) new emails.You should do something about that.) \_w[1500]\e"
+	}
+ 	else //For any other number of emails.
+	{
+		"\0\s[5]%(Flowey) * %(reference[0]) emails. \_w[1500]\e"
+		"\0\s[5]%(Narrator) * (%(reference[0]) new emails.) \_w[1500]\e"
+ 	}
+}
+
+ //---- OnBIFFFailure ---------------------------------------------------------------
+ //Various error messages that can happen when your ghost tries to connect to an email account.
+ 
+OnBIFFFailure
+ {
+	if reference[0] == "timeout" //If the connection times out.
+ 	{
+		"\0\s[21]%(Flowey) * C_nnecti_n timed _ut. \_w[1500]\e"
+		"\0\s[21]%(Narrator) * (The connection timed out.) \_w[1500]\e"
+	}
+ 	elseif reference[0] == "kick" //If the account blocks the ghost from accessing it. I think gmail may do this at first to try and protect your account from unapproved applications using it. It gives you the option to change the setting in the warning email they send you about it.
+	{
+		"\0\s[21]%(Flowey) * Acc_ss d_ni_d. \_w[1500]\e"
+		"\0\s[21]%(Narrator) * (Access denied. Check email settings.) \_w[1500]\e"
+ 	}
+	elseif reference[0] == "defect" //If the information put into the POP menu is wrong.
+ 	{
+		"\0\s[21]%(Flowey) * FA_LED. CHECK POP SETT_NGS. \_w[1500]\![open,configurationdialog]\e"
+		"\0\s[21]%(Narrator) * (Login failed. You should check your POP settings.) \_w[1500]\![open,configurationdialog]\e"
+		
+		//Note that this ends with \![open,configurationdialog]. This will open up the preferences menu I described above automatically. More on \! functions in the walkthrough. You can delete the \! tag here if you want to.
+	}
+ 	else //if there's some other kind of error.
+	{
+		"\0\s[21]%(Flowey) * FAILED. %(reference[0]) \_w[1500]\e"
+		"\0\s[21]%(Narrator) * (Connection failed. %(reference[0])) \_w[1500]\e"
+		
+		//reference[0] here stores the error message the email server would have given the ghost, hopefully.
+ 	}
+}
+
+
+ //**** Network Update *****************************************************************
+ //The following functions are for the Network Update of your ghost, where it will connect to your website, check for new files, and update itself.
+ 
+ //You can easily test these messages using the Developer panel. Go to Open at the bottom of it and choose one of the four Update Event options to simulate a Ghost's update process.
+ 
+ //---- OnUpdateBegin -------------------------------------------------------------
+ //When you first tell your ghost to update. Note that they end with \_w[500] to give a little breather time.
+ 
+OnUpdateBegin
+ {
+	"\0\s[3]%(Flowey) * U_dating\_w[500].\_w[500].\_w[500]. \_w[1500]\e"
+	"\0\s[3]%(Narrator) * (f_lowe_y is checking for updates.) \_w[1500]\e"
+ }
+
+ //---- OnUpdateReady ---------------------------------------------------------
+ //If the ghost finds new files to update with.
+ 
+OnUpdateReady
+{
+ 
+	reference[0]++ //makes sure it starts at 1 instead of 0
+	if reference[0] == 1
+	{
+		"\0\s[3]%(Flowey) * %(reference[0]) F_LE AVA_LABLE. \_w[1500]"
+		"\0\s[3]%(Narrator) * (%(reference[0]) new file available for update.) \_w[1500]"
+	
+	}
+	else
+	{
+		"\0\s[3]%(Flowey) * %(reference[0]) F_LES AVA_LABLE. \_w[1500]"
+		"\0\s[3]%(Narrator) * (%(reference[0]) new files available for update.) \_w[1500]"
+	
+	}
+    --
+	"\c\0\s[26]\i[0]\_q * DOWNLOADING\_w[500].\_w[500].\_w[500].\n[200]"
+}
+
+
+
+
+
+ //---- OnUpdate.OnDownloadBegin ------------------------------------------------
+ //This dialogue sets up the cool progress bar. I think it's real neat and since I plan on using this trimmed down version I'm keeping it in here.
+ 
+ //reference[0] - file being downloaded
+ //reference1 - number of file being downloaded, as in "this is file 1 out of 9"
+ //reference2 - overall number of files to download, counting zero. so if there are ten files, it'll display as 9.
+ //reference3 - what's being updated - ghost, shell, balloon, plugin, headline, baseware
+
+ //Big thanks to Malakin for helping me figure it out.
+ 
+ 
+//---- Downloading the update ------------------------------------------------
+OnUpdate.OnDownloadBegin
+{
+	"\C"
+	 --		 
+	Update_Process = TOINT(reference1) + 1
+	Update_Total = TOINT(reference2) + 1
+	Update_Remaining = Update_Total - Update_Process
+
+	//defining starting points
+	PointA = 1 
+	PointB = 1
+
+	//defining text buffers beforehand, otherwise they don't display right
+	_txt = ""
+	
+	//loop calculates how many check boxes to display based on the variables above, the if check is for displaying the ascii border on the sides
+	while PointA <= Update_Process 
+	{
+		_txt += "☑" 
+		PointA++ 
+	} 
+	//see above except for blank boxes
+	while PointB <= Update_Remaining 
+	{
+		_txt += "☐" 
+		PointB++ 
+	}
+	--
+	//using the text buffers to display the correct number of boxes
+	"\c[line,2]%(_txt)\n[200]%(Update_Process) of %(Update_Total)"
+	--
+	//flavortext - i don't want to lose this, i hope there's a way i can keep all of it
+		
+ 	if "aitalk" _in_ reference[0] //this is checking to see what kind of files are being downloaded. In this case, it's looking for files called aitalk in the download queue.
+	{
+		"\0\s[3]%(Flowey) * D_wnl_ading new w_rds. \_w[1500]\e"
+		"\0\s[3]%(Narrator) * (f_lowe_y is downloading new dialogue.) \_w[1500]\e"
+	}
+	else //for files not specified above
+	{
+		""
+	} 
+	--
+	
+	"\_w[500]\e"
+}
+
+ //---- OnUpdate.OnMD5CompareBegin ---------------------------------------------------
+ //This checks the hash value of the files in the directory and the files listed in updates.dau, I believe.
+ 
+OnUpdate.OnMD5CompareBegin
+{
+	//"\0\s[3] * Checking the MD5 value.\e"
+}
+
+ //---- OnUpdate.OnMD5CompareComplete --------------------------------------------------
+ //After they've checked the MD5 value and it matches.
+ 
+OnUpdate.OnMD5CompareComplete
+{
+	//"\0\s[3] * MD5 check good.\e"
+}
+
+ //---- OnUpdate.OnMD5CompareFailure ---------------------------------------------------
+ //If the MD5 values don't match, meaning if the file is missing or damaged or incomplete in some way.
+ 
+OnUpdate.OnMD5CompareFailure
+{
+	_file = reference[0]
+	"\0\s[3] The MD5 values don't match. %(_file)\_w[500]\e"
+}
+
+
+//---- OnUpdateComplete -------------------------------------------------------------
+//When the ghost has finished the update process.
+
+OnUpdateComplete
+ {
+	if reference[0] == "none" //if the ghost had nothing to update with
+ 	{
+ 		"\0\s[3]%(Flowey) * NOTHING CHANGED. \_w[1500]\e"
+		"\0\s[3]%(Narrator) * NOTHING CHANGED. \_w[1500]\e"
+		
+	}
+ 	else //if the ghost has updated successfully
+	{
+		lastUpDate = disDate
+		"\0\s[3]%(Flowey) * SOMETHING CHANGED. VIEW CHANGELOG?\_w[500]"
+		"\0\s[3]%(Narrator) * SOMETHING CHANGED. VIEW CHANGELOG?\_w[500]"
+		--
+		"\n[200]\f[align,left] \![*] \q[Yes,OnChangeLog,update]\n \n[-100]\f[align,right]\![*] \q[No,NoChangelog]"
+ 	}
+}
+
+
+Select.NoChangelog
+{
+	
+		"\0\s[3]%(Flowey) * View from Menu. Change Any time \_w[1500]\e"
+		"\0\s[3]%(Narrator) * (The changelog may be viewed at any time from the functions menu.) \_w[1500]\e"
+}
+
+
+ //---- OnUpdateFailure -------------------------------------------------------------
+ //Error messages if the update process fails in some way.
+ 
+OnUpdateFailure
+{
+	_file = SPLITPATH(reference1)[2] + SPLITPATH(reference1)[3]
+	if reference[0] == "timeout" //if the connection times out
+ 	{
+ 		"\0\s[21]%(Flowey) * f_AILED. C_onnection l_ost \_w[1500]\e"
+		"\0\s[21]%(Narrator) The update failed because the connection timed out. \_w[1500]\e"
+	}
+ 	elseif reference[0] == "md5 miss" 
+	{
+		"\0\s[17]%(Flowey) * HASH HASH HASH ##### MD5 hash check failed. \_w[1500]\e"
+		"\0\s[17]%(Narrator) NOTHING CHANGED. MD5 MISMATCH IN FILE %(_file) \_w[1500]\e"
+ 	}
+	else //for other errors
+ 	{
+		"\0\s[21]%(Flowey) * f_AILED. ERROR: %(reference[0]) SOURCE: %(_file) \_w[1500]\e"
+		"\0\s[21]%(Narrator) Update failed. Looks like ERROR:%(reference[0]).\n Source: %(_file). \_w[1500]\e"
+	}
+}
+ 
+ 
+ //**** Headlines and RSS Feeds *********************************************************
+ //This section has to do with the RSS feeds option on your ghost. If you drag and drop a url on them, they'll add it to a list you can access via the right-click menu, and they'll tell you the last set of updates for the site. This works best with RSS feeds I think, but you can experiment with other sites to see how it works.
+ //The headlines you see under the tab are in the headline folder under your base SSP install. So it'd be SSP\headlines. You should see the folders for each linked headline in there. Likewise, your RSS feeds you've added will be under SSP\rss and I don't think that option will appear in the headlines/RSS tab until you add an RSS feed to a ghost. If you want to clear your RSS feeds or headlines, just delete either of those two folders.
+ 
+
+ //---- OnHeadlinesenseBegin -----------------------------------------------------------
+ //This dialogue comes up when you select something in your RSS feed as an intro, like the other On[Thing]Begin things we've seen so far.
+ 
+OnHeadlinesenseBegin
+ {
+	"\0\s[3]%(Flowey) * Selected %(reference[0]).\e"
+ }
+
+ //---- OnHeadlinesense.OnFind --------------------------------------------------------
+ //This actually displays the feed.
+ 
+OnHeadlinesense.OnFind
+{
+	//----  What page You're on
+ 	if reference[2] == "First" || reference[2] == "First and Last"
+	{
+ 		//---- First page
+		"\0\b2\s[3]%(reference[0]):"
+ 	}
+	elseif reference[2] == "Next"
+ 	{
+		//---- Second page
+ 		"\0\b2\s[3]%(reference[0]):"
+	}
+ 	elseif reference[2] == "Last"
+	{
+ 		//---- Last page
+		"\0\b2\s[3]%(reference[0]):"
+ 	}
+	--
+ 	//---- Headlines
+	"\n[200]%reference3\n"
+ 	--
+	//---- Pages
+ 	if reference[2] == "First" || reference[2] == "Next"
+	{
+ 		//---- Bottom buttons
+		"\![*] \q[Next,] - \![*] \q[Stop,Headline_Cancel]\e"
+ 	}
+	else
+ 	{
+		//---- Bottom buttons
+ 		"\![*] \q[Stop,Headline_Cancel]\e"
+ 	}
+	
+}
+
+
+Select.Headline_Cancel
+{
+	"\0\s[3]%(Flowey) * DONE. \_w[1500]\e"
+	"\0\s[3]%(Narrator) * (f_lowe_y closed the feed) \_w[1500]\e"
+}
+
+ //---- OnHeadlinesenseComplete -------------------------------------------------------
+ //This is an odd function. As far as I can gather, this is if the headline information gathering was successful, but there's no new information to report. Possibly if none of the feeds have updated? I'm a little fuzzy on this one.
+ 
+OnHeadlinesenseComplete
+ {
+	"\0\s[3]%(Flowey) * DONE. %(reference[0])\_w[1500]\e"
+	"\0\s[3]%(Narrator) * (%(reference[0])) \_w[1500]\e"
+ }
+
+ //---- OnHeadlinesenseFailure ---------------------------------------------------------
+ //This one is more clearly for when the ghost can't get the information it needs about the RSS feed in question.
+ 
+OnHeadlinesenseFailure
+  {
+if RAND(100) <49
+	{
+		"\0\s[21]%(Flowey) * FAILURE. \_w[500]\n[150]"
+	
+ 	--
+		if reference[0] == "can't download" //if they can't download the rss feed for some reason
+		{
+			"%(Flowey) * C_NNOT DOWNLO_D \_w[1000]\s[3]"
+		}
+		elseif reference[0] == "can't analyze" //if they can't read the file for some reason
+		{
+			"%(Flowey) * ANA_YSIS FAI_ED \_w[500]\s[3]"
+		}
+		else //other errors
+		{
+			"%(Flowey) * HEADLINESENSE ERROR %(errorMsg)\_w[500]\s[3]"
+		}
+	--
+		"\e" //And here is the final /e, so you don't need to include it in the if statements above. Another one of the very rare cases this occurs.
+	}
+	else
+	{
+		"\0\s[21]%(Narrator) * %(errorMsg)\_w[500]\n[150]"	
+		
+	--
+		if reference[0] == "can't download" //if they can't download the rss feed for some reason
+		{
+			"%(Narrator) * (f_lowe_y could not download the feed... Strange.)\_w[500]\s[3]"
+		}
+		elseif reference[0] == "can't analyze" //if they can't read the file for some reason
+		{
+			"%(Narrator) * (f_lowe_y couldn't read the files. Weird...)\_w[500]\s[3]"
+		}
+		else //other errors
+		{
+			"%(Narrator) * Unknown error. %(errorMsg)\_w[500]\s[3]"
+		}
+	--
+		"\e"
+	}
+}
+
+
+//**** Ghost Creation and Updating ******************************************************
+//These next few are related to creating updates2.dau and .nar files for your ghosts.
+
+
+ //---- OnUpdatedataCreating -----------------------------------------------------------
+ //This will begin the creation of the updates2.dau file.
+ 
+OnUpdatedataCreating
+ {
+	"\0\s[3]%(Flowey) * Updates... dau dau dau...\_w[1500]\e"
+	"\0\s[3]%(Narrator) * (The updates2.dau file is being generated) \_w[1500]\e"
+ }
+
+ //---- OnUpdatedataCreated -------------------------------------------------------------
+ //After the updates2.dau file has been successfully created.
+ 
+OnUpdatedataCreated
+ {
+	"\0\s[3]%(Flowey) * Done.\_w[1500]\e"
+	"\0\s[3]%(Narrator) * (The deed is done.) \_w[1500]\e"
+ }
+
+ //---- OnNarCreating ------------------------------------------------------------------
+ //Along the same lines, this is when they begin creating a .nar file for your ghost.
+ 
+OnNarCreating
+ {
+	"\0\s[3]%(Flowey) * .NAR RAN.\_w[1500]\e"
+	"\0\s[3]%(Narrator) * (Creating .nar file.) \_w[1500]\e"
+ }
+
+ //---- OnNarCreated -------------------------------------------------------------------
+ //After the nar file has been successfully created.
+ 
+OnNarCreated
+ {
+	"\0\s[3]%(Flowey) * %(reference[0]).Do_e.\_w[1500]\e"
+	"\0\s[3]%(Narrator) * (%(reference[0]) created.) \_w[1500]\e"
+ }
+
+ //****　Clock Synchronization　**********************************************************
+//**** 미카 (http://homepage2.nifty.com/ko-ki/)의 사전을 참고했습니다．감사＞こ 나무 성
+// Machine translation: "I referenced the dictionary of Mika (http://homepage2.nifty.com/ko-ki/). Thank you. Namu Castle. "
+
+//This set of functions was done by the above Korean coder, I think. I'll leave their comment there untouched. 
+ 
+
+ //----OnSNTPBegin ------------------------------------------------------------------
+ //As with the others you've seen above, this is the beginning bit of dialogue for this process.
+ 
+OnSNTPBegin
+ {
+	"\0\s[3]%(Flowey) * TIME. time.\_w[500]\e"
+	"\0\s[3]%(Narrator) * (f_lowe_y is checking the time.) \_w[500]\e"
+	//%(reference[0]) here is the site they'll be using to check your clock.
+ }
+
+
+ //----　OnSNTPCompare----------------------------------------------------------
+ //Now the ghost is going to compare the current time of your computer's system to the time of the site they connected to. 
+ 
+OnSNTPCompare
+ {
+ 	"Retrieved Time: %reference1[1]/%reference1[2]/%reference1[0] %reference1[3]:%reference1[4]:%reference1[5]\_w[100]\n/
+	Your Time: %reference2[1]/%reference2[2]/%reference2[0] %reference2[3]:%reference2[4]:%reference2[5]\_w[100]\n/
+ 	\n"
+	--
+ 	if reference3 == 0 //if your clock is already accurate.
+	{
+ 		"\0\s[3]%(Flowey) * TIME. CORRECT. \_w[500]\e"
+		"\0\s[3]%(Narrator) * (The time is correct.) \_w[500]\e"
+	}
+ 	else //if your clock doesn't match
+	{
+ 		"\0\s[3]%(Flowey) * WRONG. \_w[300]\s[3]\n  FIX?\n[150] \![*] \q[Yes,OnSNTPEXECUTE]\n \n[-100]\f[align,right]\![*] \q[No,OnSNTPCANCEL]\e"
+		
+		"\0\s[3]%(Narrator) * Your clock is wrong.\_w[300]\0\s[3]\1\s[-1]\nYou are given the option of correcting it.\n[150] \![*] \q[Correct it,OnSNTPEXECUTE]\n \n[-100]\f[align,right]\![*] \q[Leave it,OnSNTPCANCEL]\e"
+	}
+ }
+
+ //----　OnSNTPEXECUTE ------------------------------------------------------------------
+ //After they've fixed your clock. Note the \6 tag - that's what actually changes the clock. Do not remove that tag.
+ 
+OnSNTPEXECUTE
+ {
+	"\0\s[3]%(Flowey) * Corrected. \_w[500]\e"
+	"\0\s[3]%(Narrator) * The time is now correct. \_w[500]\e"
+ }
+
+ //----　OnSNTPCANCEL ------------------------------------------------------------------
+ //If you decide not to change your clock when they tell you it doesn't match.
+ 
+OnSNTPCANCEL
+ {
+	"\0\s[3]%(Flowey) * I-i-i-i-idi- Moron. \_w[500]\e"
+	"\0\s[3]%(Narrator) * (You decide that you like being wrong.) \_w[500]\e"
+ }
+
+ //----　OnSNTPFailure ------------------------------------------------------------------
+ //If they can't change the clock for some reason, possibly because the site timed out but it could be anything.
+ 
+OnSNTPFailure
+ {
+	"\0\s[14]%(Flowey) * Tried... failed... \_w[500]\e"
+	"\0\s[14]%(Narrator) * But IT refused. \_w[500]\e"
+ }
+
+
+ //--OnDisplayChange----------------------------------------------------------------
+ //This is when you change the resolution of your monitor while your ghost is running.
+ 
+OnDisplayChange
+ {
+	displaybpp    = reference[0]
+ 	displaywidth  = reference[1]
+	displayheight = reference[2]
+ }
+
+
+
+ //---- OnScreenSaverStart -------------------------------------------------------
+ //This happens if your ghost is running when your screensaver starts up. I've never got this to trigger but I love this idea, and I feel like there's a way to do it I haven't figured out yet. So you can skip these for now if you want, but if I do ever get it working, I'll come back and make a note of it.
+ 
+OnScreenSaverStart
+ {
+	"\0\s[14]%(Flowey) * Ha... ha... \_w[500]\e"
+	"\0\s[14]%(Narrator) * (The world is strange.) \_w[500]\e"
+ }
+
+ //---- OnScreenSaverEnd -------------------------------------------------------
+ //When you wiggle your mouse and stop your screensaver.
+ 
+OnScreenSaverEnd
+ {
+	"\0\s[5]%(Flowey) * Stopped... good. \_w[500]\e"
+	"\0\s[5]%(Narrator) * (The world returns to 'normal'.) \_w[500]\e"
+ }
+
+
+ //---- OnApplicationBoot ---------------------------------------------------------------
+ //This supposedly is for when a program starts but I have honestly never gotten it to work or seen it happen. I wouldn't sweat these three related functions too much.
+ 
+OnApplicationBoot
+ {
+	"\0\s[5]%(Flowey) * %(reference[0]) started. \_w[500]\e"
+	"\0\s[5]%(Narrator) * (%(reference[0]) started.) \_w[500]\e"
+ }
+
+ //---- OnApplicationClose --------------------------------------------------------------
+ //See above, but for the program closing.
+ 
+OnApplicationClose
+ {
+	"\0\s[5]%(Flowey) * %(reference[0]) closed. \_w[500]\e"
+	"\0\s[5]%(Narrator) * (%(reference[0]) closed.) \_w[500]\e"
+ }
+
+ //---- OnApplicationFileOpen ----------------------------------------------------------
+ //I believe this is for when the program detailed above opens a document file of some kind.
+ 
+OnApplicationFileOpen
+ {
+	"\0\s[3]%(Flowey) * O_ening %(reference[0]). \_w[500]\e"
+	"\0\s[3]%(Narrator) * (%(reference[0]) is being opened.) \_w[500]\e"
+ }
+
+
+
+
+ //---- OnBatteryLow -----------------------------------------------------------------
+ //This is for when your laptop's battery is low.
+ 
+OnBatteryLow
+ {
+	"\0\s[5]%(Flowey) * %(reference[0]) pow_r r_maining. \_w[500]\e"
+	"\0\s[5]%(Narrator) * (You see your battery is low. Only %(reference[0]) power remains.) \_w[500]\e"
+ }
+ 
+ //--OnBatteryCritical-----------------------------------------------------------------
+ //Likewise, this is for if your battery is REALLY low.
+ 
+OnBatteryCritical
+{
+	"\0\s[21]%(Flowey) * Pow_r critical. \_w[500]\e"
+	"\0\s[21]%(Narrator) * (f_lowe_y thinks you're an idiot for letting your battery get this low.) \_w[500]\e"
+}
+ 
+ 
+ //--OnShellScaling
+ //If you right click the ghost, you can go to Shell Scaling, which lists a number of different percentages. Those are the percentages your ghost can be scaled in size up or down.
+ 
+OnShellScaling
+{
+	if reference[0] >= 150 //this number is the percentage that you're scaling the ghost up to. In this case, it's 150%.
+	{
+		"\0\s[3]%(Flowey) * %(hahaha)\e"
+		"\0\s[16]%(Narrator) * (Making f_lowe_y larger... was that a good idea?) \_w[500]\e"
+	}
+	elseif reference[0] == 100 //this is 100%
+	{
+		"\0\s[3]%(Flowey) * Normality.\e"
+		"\0\s[16]%(Narrator) * (Better this way.) \_w[500]\e"
+	}
+	elseif reference[0] == 50 //this is 50%. You can add any percentage that's listed under shell scaling if you want using more elseifs.
+	{
+		"\0\s[3]%(Flowey) * Pat pat pat patpatpatpathetic.\_w[500]"
+		"\0\s[16]%(Narrator) * (Smol and cute.) \_w[500]\e"
+	}
+}

@@ -1,0 +1,355 @@
+//*****************************************************************************
+//SHIORI/3.0 control script for YAYA
+//optional function
+//English Translation <3 Era 2021
+//******************************************************************************
+
+#define	ESCAPE_TAG_1	CHR(0x3,0x3)
+#define	ESCAPE_TAG_2	CHR(0x4,0x4)
+
+//******************************************************************************
+//Initialization and cleanup
+//******************************************************************************
+
+OnSystemLoad.SHIORI3FW.OPTIONAL
+{
+}
+
+OnSystemUnload.SHIORI3FW.OPTIONAL
+{
+	ERASEVAR('SHIORI3FW.FMOCache')
+	ERASEVAR('SHIORI3FW.SakuraNameList')
+	ERASEVAR('SHIORI3FW.FMOTable')
+}
+
+//******************************************************************************
+//Sakura Script Tag Removal
+//******************************************************************************
+
+//------------------------------------------------------------------------------
+//　Function Name : SHIORI3FW.EscapeDangerousTags
+//　Function : Escapes only dangerous tags.
+//　Argument : argv0＝Text
+//------------------------------------------------------------------------------
+SHIORI3FW.EscapeDangerousTags{
+	_txt=_argv[0]
+	_txt=REPLACE(_txt,'\\',ESCAPE_TAG_1)
+	_txt=REPLACE(_txt,'\%',ESCAPE_TAG_2)
+	_txt=RE_REPLACE(_txt, /
+		'\\(?=(!\[(' + /
+		'updatebymyself|vanishbymyself|enter,passivemode|' + /
+		'leave,passivemode|lock,repaint|unlock,repaint|biff|' + /
+		'open,browser|open,mailer|raise)' + /
+		'.*?\]|\\j\[))' , /
+		'\\')
+	_txt=REPLACE(_txt,ESCAPE_TAG_2,'\%')
+	_txt=REPLACE(_txt,ESCAPE_TAG_1,'\\')
+	_txt
+}
+
+//------------------------------------------------------------------------------
+//　Function Name : SHIORI3FW.EscapeAllTags
+//　Function : Escape all Sakura script tags.
+//　Argument : argv0＝Text
+//------------------------------------------------------------------------------
+SHIORI3FW.EscapeAllTags{
+	_txt=_argv[0]
+	_txt=REPLACE(_txt,'\\',ESCAPE_TAG_1)
+	_txt=REPLACE(_txt,'\%',ESCAPE_TAG_2)
+	_txt=REPLACE(_txt,'\','\\')
+	_txt=REPLACE(_txt,'%','\%')
+	_txt=REPLACE(_txt,ESCAPE_TAG_2,'\%')
+	_txt=REPLACE(_txt,ESCAPE_TAG_1,'\\')
+	_txt
+}
+
+//------------------------------------------------------------------------------
+//　Function Name : SHIORI3FW.TranslateSystemChar
+//　Function : Replace operators and other system reserved characters with other ones.
+//　Argument : argv0＝Text　argv1＝Replacement （Default_）
+//------------------------------------------------------------------------------
+SHIORI3FW.TranslateSystemChar
+{
+	_c = '_'
+	if _argc >= 2 {
+		_c = _argv[1]
+	}
+	_text = TOSTR(_argv[0])
+	_text = RE_REPLACE(_text,"[ !%(CHR(0x22))%(CHR(0x25))#$&()*+,\-/:;<=>?@\[\]`{|}~]",_c)
+	_text
+}
+
+//------------------------------------------------------------------------------
+//　Function Name : SHIORI3FW.InitBalloons
+//　Function : Automatically generate a balloon initialization script
+//------------------------------------------------------------------------------
+SHIORI3FW.InitBalloons
+{
+	_tx = ''
+	_n = ARRAYSIZE(SHIORI3FW.HWnd)
+	for _i = 0 ; _i < _n ; _i++ {
+		if SHIORI3FW.HWnd[_i] != 0 {
+			_tx += "\p[%(_i)]\c\b[-1]"
+		}
+	}
+	_tx
+}
+
+//******************************************************************************
+// FMO-related
+//******************************************************************************
+//------------------------------------------------------------------------------
+//Function Name : SHIORI3FW.IsGhostExist(ゴースト名（sakuraname）[,fmoname])
+//Function Name : SHIORI3FW.IsGhostExist(ghostname（sakuraname）[,fmoname])
+//Function : Find out if the specified ghost exists
+//　　　　If it doesn't exist, return 0, if it does, 1.
+//------------------------------------------------------------------------------
+SHIORI3FW.IsGhostExist
+{
+	_ghostname=_argv[0]
+	SHIORI3FW.RefreshFMOTable(_argv[1])
+	_result=ASEARCH(_ghostname,SHIORI3FW.SakuraNameList)
+	if _result == -1 {
+		0
+	}else{
+		1
+	}
+}
+
+
+//------------------------------------------------------------------------------
+//Function Name : SHIORI3FW.RefreshFMOTable(FMO名称,無視するエントリのHWND)
+//Function Name : SHIORI3FW.RefreshFMOTable(FMOname,HWND of entries to ignore)
+
+//Function : Create an FMO table by READFMO.
+/*
+The FMO is cached and if it has not changed, no analysis is performed.
+If the FMO name is omitted, the name is automatically changed to "Sakura".
+If the HWND of the entry to ignore is omitted, the SHIORI3FW.HWnd[0] variable is used.
+(i.e., it will not automatically contain any information about itself)
+
+Global variable ：SHIORI3FW.FMOCache		FMO Content Cache (Simple Dump)
+Global variable ：SHIORI3FW.FMOTable		FMO table (simple array. Contents are below)
+id|name|keroname|hwnd|kerohwnd|path|ghostpath,
+id|name|keroname|hwnd|kerohwnd|path|ghostpath,
+...
+
+Global variable ：SHIORI3FW.SakuraNameList	General purpose array enumerating sakuraname
+Also, so-called "non-ghost" FMO entries (e.g., temporary startup) are eliminated at this point.
+*/
+//------------------------------------------------------------------------------
+SHIORI3FW.RefreshFMOTable : void
+{
+	_fmoname=TOSTR(argv[0])
+	if _fmoname == '' {
+		_fmoname='Sakura'
+	}
+
+	_result=READFMO(_fmoname)
+	
+	if SHIORI3FW.FMOCache == _result {
+		//If it has not changed, return immediately
+		return
+	}
+
+	//Cache the contents of FMO
+	SHIORI3FW.FMOCache=_result
+	SHIORI3FW.FMOTable=''
+	SHIORI3FW.SakuraNameList=IARRAY
+
+	_ignorehwnd=TOSTR(_argv[1])
+	if _ignorehwnd == '' {
+		_ignorehwnd = SHIORI3FW.HWnd[0]
+	}
+
+	//\r\n Split
+	_array = SPLIT(_result,C_CRLF)
+	_arraynum=ARRAYSIZE(_array)
+
+	//Variable initialization
+	_fmotable_temp=''
+	_id=''
+	_oldid=''
+	_name=''
+	_keroname=''
+	_hwnd=''
+	_kerohwnd=''
+	_path=''
+	_ghostpath=''
+
+	//Store the result in pseudo secondary array
+	//ssp_fmo_header_000024dc_005c094e.hwnd,6031694
+	//<------------------id----------> key  value
+	for _i=0 ; _i<_arraynum-1 ; _i++ {
+		//一時起動ゴーストかどうか？
+		_buf=_array[_i]
+		_id=_buf[0,'.']
+		if 'SSTPVIEWER-' _in_ _id  || 'ssp_fmo_header_dummyentry' _in_ _id || 'SSSB' _in_ _id
+		{
+			//Do nothing because it is a temporary start
+		}else{
+			if _oldid == '' {
+				_oldid = _id
+			}
+			//Export temporary save when ID changes
+			if _oldid != _id {
+				_fmotable_temp+="%(_oldid)|%(_name)|%(_keroname)|%(_hwnd)|%(_kerohwnd)|%(_path)|%(_ghostpath),"
+				_oldid = _id
+				_name=''
+				_keroname=''
+				_hwnd=''
+				_kerohwnd=''
+				_path=''
+				_ghostpath=''
+			}
+			_kvpair=_buf[1,'.']
+			_key=_kvpair[0,C_BYTE1]
+			_val=_kvpair[1,C_BYTE1]
+			
+			//Save each value temporarily
+			case _key {
+			when 'hwnd'		{_hwnd=_val}
+			when 'name'		{_name=_val}
+			when 'keroname'	{_keroname=_val}
+			when 'path'		{_path=_val}
+			when 'kerohwnd'	{_kerohwnd=_val}
+			when 'ghostpath'{_ghostpath=_val}
+			}
+		}
+	}
+	//Write out the last entry
+	_fmotable_temp += "%(_id)|%(_name)|%(_keroname)|%(_hwnd)|%(_kerohwnd)|%(_path)|%(_ghostpath)"
+	
+	//Remove HWNDs to ignore and create SakuraNameList at the same time
+	_count_temp=ARRAYSIZE(_fmotable_temp)
+	for _i=0;_i<_count_temp;_i++ {
+		_tablestr=_fmotable_temp[_i]
+		_tablehwnd=_tablestr[3,'|']
+		if _tablehwnd != _ignorehwnd {
+			SHIORI3FW.FMOTable += _tablestr+','
+			SHIORI3FW.SakuraNameList=(SHIORI3FW.SakuraNameList,_tablestr[1,'|'])
+		}
+	}
+	
+	//If it ends with a comma, remove it.
+	if SUBSTR(SHIORI3FW.FMOTable,STRLEN(SHIORI3FW.FMOTable)-1,1)==',' {
+		SHIORI3FW.FMOTable=SUBSTR(SHIORI3FW.FMOTable,0,STRLEN(SHIORI3FW.FMOTable)-1)
+	}
+}
+
+//******************************************************************************
+// Text processing
+//******************************************************************************
+
+//------------------------------------------------------------------------------
+//　Function Name : SHIORI3FW.MakeJustText
+//　Function : Fill / omit spaces until the specified length is reached
+//　Argument : argv0＝Text　argv1＝Number of characters (converted to half-width characters)
+//------------------------------------------------------------------------------
+
+//---- Function to complete trailing spaces (from chords)
+SHIORI3FW.MakeLongText
+{
+	_menuitem = _argv[0]
+	_len = _argv[1] - GETSTRBYTES(_menuitem,127)
+
+	if _len <= 0 {
+		_menuitem
+		return
+	}
+	
+	_space = '　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　'
+	_menuitem += SUBSTR(_space,0,_len / 2)
+	
+	if _len % 2 > 0 {
+		_menuitem += " "
+	}
+	_menuitem
+}
+
+//---- Cut at an appropriate length----------------
+SHIORI3FW.MakeShortText
+{
+	if _argc < 2 {
+		'';
+		return;
+	}
+	
+	_src = _argv[0]
+	_cut = TOINT(_argv[1])
+	_text = ''
+	
+	if GETSTRBYTES(_argv[0],127) <= _cut {
+		_argv[0]
+		return;
+	}
+	
+	_num = STRLEN(_src)
+	_lendiff = 0 //Dummy assignment to lower the scope by one for later storage
+	
+	while 1 {
+		_text = SUBSTR(_argv[0],0,_num)
+		
+		_lendiff = _cut - GETSTRBYTES(_text,127) - 2
+		if _lendiff >= 0 {
+			break;
+		}
+		_num -= 1
+		if _num <= 0 {
+			''
+			return
+		}
+	}
+	
+	if _lendiff > 0 {
+		_text += '...'
+	}
+	else {
+		_text += '..'
+	}
+	_text
+}
+
+//---- Adjust the length exactly
+SHIORI3FW.MakeJustText
+{
+	_text = SHIORI3FW.MakeLongText(_argv[0],_argv[1])
+	if _text != _argv[0] { //短すぎた
+		_text
+		return
+	}
+	
+	_text = SHIORI3FW.MakeShortText(_argv[0],_argv[1])
+	_text
+}
+
+//******************************************************************************
+// Other
+//******************************************************************************
+
+//---- HTTP Code-> Code in Japanese _argv[0]
+
+SHIORI3FW.HTTPCodeToMessage
+{
+	case _argv[0] {
+		when '403' {
+			'アクセス拒否'
+		}
+		when '404','410' {
+			'ファイル無し'
+		}
+		when '500','502','503' {
+			'サーバ側の不調'
+		}
+		when 'timeout' {
+			'タイムアウト'
+		}
+		when 'fileio' {
+			'ファイル書き込みエラー'
+		}
+		when 'artificial' {
+			'手動中断'
+		}
+	}
+}
+

@@ -1,0 +1,217 @@
+//---------------------------Surfaces.txt--------------------------
+//All art (c) Era the Outworlder theoutworlder.tumblr.com
+//Coded by me (Era) with guidance from Zarla's tutoriel.
+//I stripped out most of Zar's comments (because if I need them i have the originals to look back on) so if you're editing anything in here and need them...
+//Sorry?
+
+//--Flowey's Poses---------------------------------------------------------
+surface.append1000-1099 //this is appending this code to Surface1000 through Surface1299.
+//There are actually a few special ways you can refine this! For example, surface.append500-590,205 would append the code to Surface500 to Surface590, as well as Surface205. 
+//surface.append500-590,205,!507-509 it would do the same, except it would skip Surfaces507 through 509.
+{
+collision0,116,162,224,254,Face
+collision1,100,133,221,153,Top
+collision3,156,267,201,279,Chin
+}
+
+
+surface0
+{
+collision0,116,162,224,254,Face
+collision1,100,133,221,153,Top
+collision3,156,267,201,279,Chin
+
+element0,overlay,surface0.png,0,0
+
+//Randomised expressions at rest
+0interval,random,10
+0pattern0,0,0,alternativestart,[1.1.1.2.2.3.4]
+
+// Blink animation
+1interval,never
+1pattern0,-1,20,overlay,0,0
+1pattern1,1101,1,overlayfast,0,0
+1pattern2,1102,1,overlayfast,0,0
+1pattern3,1103,1,overlayfast,0,0
+1pattern4,1104,1,overlayfast,0,0
+1pattern5,1105,10,overlayfast,0,0
+1pattern6,1103,1,overlayfast,0,0
+1pattern7,1101,1,overlayfast,0,0
+1pattern8,-1,5,overlay,0,0
+
+//Eyeroll animation
+2interval,never
+2pattern0,-1,20,overlay,0,0
+2pattern1,1201,10,overlayfast,0,0
+2pattern2,1202,10,overlayfast,0,0
+2pattern3,1203,10,overlayfast,0,0
+2pattern4,1204,10,overlayfast,0,0
+2pattern5,1205,10,overlayfast,0,0
+2pattern6,1206,10,overlayfast,0,0
+2pattern7,1207,10,overlayfast,0,0
+2pattern8,1208,10,overlayfast,0,0
+2pattern9,1209,10,overlayfast,0,0
+2pattern10,1210,10,overlayfast,0,0
+2pattern11,1211,10,overlayfast,0,0
+2pattern12,-1,5,overlay,0,0
+
+// Side to side animation
+3interval,never
+3pattern0,-1,20,overlay,0,0
+3pattern1,1301,1,replace,0,0
+3pattern2,1302,10,replace,0,0
+3pattern3,1303,13,replace,0,0
+3pattern4,1304,15,replace,0,0
+3pattern5,1305,12,replace,0,0
+3pattern6,1306,12,replace,0,0
+3pattern7,1307,12,replace,0,0
+3pattern8,1308,10,replace,0,0
+3pattern9,1309,15,replace,0,0
+3pattern10,1310,10,replace,0,0
+3pattern11,-1,5,overlay,0,0
+
+
+// Side to side variation
+4interval,never
+4pattern0,-1,20,overlay,0,0
+4pattern1,1301,1,replace,0,0
+4pattern2,1302,10,replace,0,0
+4pattern3,1303,13,replace,0,0
+4pattern4,1304,15,replace,0,0
+4pattern5,1305,12,replace,0,0
+4pattern6,1306,12,replace,0,0
+4pattern7,1307,12,replace,0,0
+4pattern8,1308,10,replace,0,0
+4pattern9,1309,15,replace,0,0
+4pattern10,1310,10,replace,0,0
+4pattern11,1301,1,replace,0,0
+4pattern12,1302,10,replace,0,0
+4pattern13,1303,13,replace,0,0
+4pattern14,1304,15,replace,0,0
+4pattern15,1305,12,replace,0,0
+4pattern16,1306,12,replace,0,0
+4pattern17,1307,12,replace,0,0
+4pattern18,1308,10,replace,0,0
+4pattern19,1309,15,replace,0,0
+4pattern20,1310,10,replace,0,0
+4pattern21,1301,1,replace,0,0
+4pattern22,1302,10,replace,0,0
+4pattern23,1303,13,replace,0,0
+4pattern24,1304,15,replace,0,0
+4pattern25,1305,12,replace,0,0
+4pattern26,1306,12,replace,0,0
+4pattern27,1307,12,replace,0,0
+4pattern28,1308,10,replace,0,0
+4pattern29,1309,15,replace,0,0
+4pattern30,1310,10,replace,0,0
+4pattern31,-1,5,overlay,0,0
+}
+
+//Embarrassed
+surface1
+{
+element0,overlay,surface1001.png,0,0
+}
+
+//Surprise
+surface2
+{
+element0,overlay,surface1002.png,0,0
+}
+
+//Anxiety
+surface3
+{
+element0,overlay,surface1003.png,0,0
+}
+
+//Discourage
+surface4
+{
+element0,overlay,surface1004.png,0,0
+}
+
+//Big Smile
+surface5
+{
+element0,overlay,surface1005.png,0,0
+}
+
+//Closing Eyes
+surface6
+{
+element0,overlay,surface1006.png,0,0
+}
+
+//Anger
+surface7
+{
+element0,overlay,surface1007.png,0,0
+}
+
+//Sneer
+surface8
+{
+element0,overlay,surface1008.png,0,0
+}
+
+//Annoyed
+surface9
+{
+element0,overlay,surface1009.png,0,0
+}
+
+
+//blank for Kero
+surface10
+{
+element0,overlay,surface10.png,0,0
+}
+
+
+//Looking "right"
+surface12
+{
+element0,overlay,surface1012.png,0,0
+}
+
+//Closed Mouth
+surface13
+{
+element0,overlay,surface1013.png,0,0
+}
+
+//Closed Mouth Looking "right"
+surface14
+{
+element0,overlay,surface1014.png,0,0
+}
+
+//Shocked
+surface15
+{
+element0,overlay,surface1015.png,0,0
+}
+
+//Scared/Hit
+surface16
+{
+element0,overlay,surface1016.png,0,0
+}
+
+//Ugly Crying
+surface17
+{
+element0,overlay,surface1017.png,0,0
+}
+
+//Laughing
+// surface18
+// {
+// element0,overlay,surface1310.png,0,0
+
+// 4interval,talk,4
+// 4pattern0,1312,10,overlay,0,0
+// 4pattern1,1313,300,overlay,0,0
+// 4pattern2,-1,0,overlay,0,0
+// }

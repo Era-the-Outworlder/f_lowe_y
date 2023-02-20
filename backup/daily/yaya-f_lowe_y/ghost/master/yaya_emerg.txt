@@ -1,0 +1,28 @@
+// Emergency Mode Loading Protacol 
+
+charset, UTF-8
+charset.dic, UTF-8
+charset.output, UTF-8
+charset.file, UTF-8
+charset.save, UTF-8
+charset.extension, UTF-8
+
+
+// ---- Dictionary Files ----
+
+include, system_config.txt		
+			
+dic, htf_emergencyboot.dic	
+
+// dic, htf_devtools.dic
+
+//dic, htf_drawmenu.dic	
+
+
+// ---- Log Location ----
+
+//Sets the file path of the event log. Seems to be duplicated in other parts of the program
+
+messagetxt,system/messagetxt/flowery.txt
+log, flowey_yaya.log
+maxlognum,1000

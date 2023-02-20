@@ -1,0 +1,31 @@
+﻿//----English Translation <3 Era 2021
+
+//------------------------------------------------------------------------------
+// System dictionary
+//------------------------------------------------------------------------------
+
+// YAYA: Configuration dictionary. Be sure to specify it first.
+dic, yaya_config.txt		
+
+// YAYA: System dictionary
+dic, system/yaya_shiori3.dic
+	
+// YAYA: Dictionary for optional functions
+dic, system/yaya_optional.dic	
+
+// YAYA: AYA backwards-compatibility dictionary
+dic, system/yaya_compatible.dic	
+
+//------------------------------------------------------------------------------
+// Execution log
+// Record the execution log in ayame.log. 
+// Reccomended to have on during development
+//------------------------------------------------------------------------------
+
+log, ayame.log	
+maxlognum,1000
+messagetxt,system/messagetxt/english.txt
+
+// Do not log these events
+ignoreiolog, ID: OnSecondChange 
+ignoreiolog, ID: OnMouse      

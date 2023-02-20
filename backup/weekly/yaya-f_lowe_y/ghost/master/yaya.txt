@@ -1,0 +1,49 @@
+﻿//Character Set definitions. Do not change unless absolutely certain what you are doing. Even then, reconsider whether it is necessary.
+
+charset, UTF-8
+charset.dic, UTF-8
+charset.output, UTF-8
+charset.file, UTF-8
+charset.save, UTF-8
+charset.extension, UTF-8
+
+
+// ---- Dictionary Files ----
+
+include, system_config.txt		
+			
+dic, htf_aitalk.dic	
+dic, htf_anchor.dic		
+dic, htf_bootend.dic
+dic, htf_changelog.dic
+dic, htf_commu.dic
+dic, htf_devtools.dic
+dic, htf_drawmenu.dic	
+dic, htf_etc.dic
+// dic, htf_desktopeye.dic
+dic, htf_glitchtext.dic		
+dic, htf_menu.dic
+dic, htf_mouse.dic
+dic, htf_richpresence.dic
+dic, htf_teachbirthday.dic
+dic, htf_teachname.dic
+dic, htf_teachpronoun.dic
+dic, htf_word.dic
+
+
+// ---- Error Message List ----
+// Points to a file to specify what list of error messages to draw from.
+
+messagetxt,system/messagetxt/flowery.txt
+
+
+// ---- Function Depth ----
+// Controls the max iterations of a loop before failure. 0 to disable failsafe.
+
+// fncdepth,[0]
+
+
+// ---- Log Location ----
+//Sets the file path of the event log. Seems to be duplicated in other parts of the program
+
+log, flowey_yaya.log

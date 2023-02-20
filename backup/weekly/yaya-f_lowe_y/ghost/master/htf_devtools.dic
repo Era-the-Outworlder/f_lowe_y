@@ -1,0 +1,209 @@
+
+
+//       _                _                  _      
+//    __| |  ___ __   __ | |_   ___    ___  | | ___ 
+//   / _` | / _ \\ \ / / | __| / _ \  / _ \ | |/ __|
+//  | (_| ||  __/ \ V /  | |_ | (_) || (_) || |\__ \
+//   \__,_| \___|  \_/    \__| \___/  \___/ |_||___/
+//                                                  
+
+// DEV TOOLS FUCK YEAH
+// ------ This is a whole bunch of testing stuff shhhhh ------
+// ---- An Important Tool
+//		LOGGING("What Am I Doing Here")
+// \![embed,OnGLITCH,abcdefg]
+
+OnConvert
+{
+	_text = ""
+	if !_argv
+	{
+		_text = reference[0]
+	}
+	else
+	{
+		_text = _argv[0]
+	}
+	_send = CHARSPLIT(_text)
+	_final = OnTesting(_send)
+	--
+	_final;
+}
+
+OnTesting
+{
+	_array = IARRAY
+	_array = _argv[0]
+	_display = ""
+	_num = 0
+	foreach _array; _char
+	{_display += "%(_char)"}
+	--
+	_display
+}
+
+OnTestVariable
+{
+	"\0\s[3]\b6%(Narrator) * Testing! \n[200]"
+	--
+	"\![*] \q[Set Variable,seteVal]\n"
+	--
+	"\![*] \q[Set PETS+,setPET1]\n"
+	--
+	"\![*] \q[Set PETS-,setPET2]\n"
+	--
+	"\![*] \q[Set LV,setSTAT]\n"
+	--
+	"\![*] \q[Set EXP,setSTAT2]\n"
+	--
+	"\![*] \q[Set commRatio,setRATE]\n"
+	--
+	"\![*] \q[Test OnfirstBoot?,newBoot]\n"
+	--
+	"\![*] \q[Test function?,funkTest]\n"
+	
+	
+	// "%(ellVee)"
+	// "%(year) %(month) %(day) %(weekday) %(hour) %(ampm) %(hour12) %(minute) %(second)\e"
+	
+}
+
+Select.seteVal
+{
+	"\![open,input,OnEVal,]"
+}
+OnEVal
+{
+	EVAL(reference[0])
+}
+Select.setPET1
+{
+	"\![open,sliderinput,OnPet1,,%(petCount),0,500]"
+}
+OnPet1
+{
+	petCount = reference[0]
+}
+Select.setPET2
+{
+	"\![open,sliderinput,OnPet2,,%(petCountNeg),0,500]"
+}
+OnPet2
+{
+	petCountNeg = reference[0]
+}
+
+Select.setSTAT
+{
+	"\![open,sliderinput,OnStat,,%(ellVee),1,20]"
+}
+OnStat
+{
+	ellVee = reference[0]
+}
+Select.setSTAT2
+{
+	"\![open,sliderinput,OnStat2,,%(EXP),0,500]"
+}
+OnStat2
+{
+	EXP = reference[0]
+}
+Select.setRATE
+{
+	"\![open,sliderinput,OnCOMMRATE,,%(communicateratio),0,100]"
+}
+OnCOMMRATE
+{
+	communicateratio = reference[0]
+}
+Select.funkTest
+{	
+	// "\0\s[15]\b[-1]%(hitSFX)a \_w[100]b \s[-1]\_w[3000]c \s[21]%(savestateSFX)d\_w[1000]e\e"
+	
+	DUMPVAR()
+	"\n[300]%(Narrator) * Dumping Variables to flowey_yaya.log.\n"
+	--
+	// _text = OnGLITCH("This is a test string. Let's go!")
+	// --
+
+	// _display = ""
+	
+	// --
+	// foreach ghostexlist; _ref
+	// {
+		// _display += "%(_ref)\n"
+		// _num ++
+	// } 
+	// --
+	
+	// "%(_display)\x"
+	
+	
+	// "\![open,teachbox]Teachbox\x\n/
+	// \![open,communicatebox]Communicatebox\x\n/
+	// "\![open,inputbox,OnTestInput,--reference=a,--reference=b,--reference=c]Inputbox\x\n"
+	// \![open,passwordinput,OnTestInput]Passwordbox\x\n/
+	// \![open,dateinput,OnTestInput,,1900,1,1]Dateinput\x\n/
+	// \![open,sliderinput,OnTestInput,,1,1,21]Sliderinput\x\n/
+	// "\![open,timeinput,OnTestInput,,%(hour),%(minute),0,--reference=setEnd] Timeinput\x"
+	// '\![*] \q[Set Away End Time,"script:\![open,timeinput,OnTestInput,,%(hour),%(minute),0,--reference=setEnd]"]\n'
+	_didpunch = ASEARCH("punching",agreedToConsequences)
+	"%(_didpunch)"
+
+}
+
+OnTestInput
+{
+	"%(refTest)"
+}
+
+Select.newBoot
+{
+	"\![raise,OnfirstBoot,0]"
+}
+
+
+
+
+// ----------------
+
+reqCheck
+{   
+    _display = ""
+    _sz = ARRAYSIZE(var.req.key)
+    for _i = 0; _i < _sz; _i++ 
+    {
+        _keyname = var.req.key[_i]
+        _value = var.req.value[_i]
+        _display += "%(_keyname): %(_value)\n[150]"
+    }
+    --
+    "\_q\b6\![set,autoscroll,disable]%(_display)\x"
+}
+
+refTest
+{
+	_display = ""
+	_num = 0
+	foreach reference; _ref //Each time the loop runs, _ref will store the next value in the array, until the array ends
+	{
+		_ref = SHIORI3FW.EscapeAllTags(_ref)
+		_display += "\n%(_num)- %(_ref)"
+		_num ++
+	}
+	--
+	"\_q\b2\![set,autoscroll,disable]%(_display)\x"
+}
+
+OnEmbedTest
+{
+	"Argument:\n%(_argv)\nReference:\n%(refTest)\x"
+}
+
+OnTeach
+{
+	reference[0]
+}
+
+// ---- Weird testing stuff end ----

@@ -1,0 +1,725 @@
+﻿//---------------------------Menus--------------------------
+//This .dic file is primarily concerned with the double-click menu
+
+
+
+// ----OpenSakuraMenu ----
+
+
+OpenSakuraMenu
+{
+		
+		"\b2\![set,autoscroll,disable]%(menuIntro)"
+		--
+		OnMenu
+}
+
+OnMenu
+{
+	case reference[0]
+	{
+		when "main"
+		{
+			"\b2\n[110]\_q\n" 
+			--
+			if lastTalk != ""
+			{
+				"\![*] \q[%(rlTalk),OnLastTalk]\n"
+			}
+			else
+			{
+				"\n"
+			}
+			--
+			"\![*] \q[%(newTalk),OnAiTalk]\n"
+			--
+			"\![*] \q[%(ghostChat),OnStartCommunicate]\n"
+			--
+			"\![*] \q[%(userMenu),OnMenu,user]\n"
+			--
+			"\![*] \q[%(configMenu),OnMenu,settings]\n"
+			--
+			"\![*] \q[%(funMenu),OnMenu,functions]\n[200]"
+			--
+			"\![*] \q[%(statsMenu),OnMenu,stats]\n"
+			--
+			"LV: %(ellVee)\n[200]"
+			--
+			"%(disDate) %(disTime)\n"
+			--
+			"v%(OnGhostVer)\n"
+			--
+			if lastUpDate
+			{
+				"Last Updated: %(lastUpDate)\n[150]"
+			}
+			else
+			{
+				"\n[150]"
+			}
+			--
+			"\![*] \q[%(closeMenu),OnMenu,cancel]\n[150]"
+			--
+			
+			if eraDebug == "ON"
+			{
+				"\![*] \q[Test variable,OnTestVariable]\n\e"
+			}
+			else
+			{
+				"\e"
+			}
+		}
+		when "user"
+		{
+			"\0\b[2]\![set,autoscroll,disable]\_q\f[align,center]User Settings\n \f[align,left]\n" 
+			--
+			"\f[height,-1]NAME:\f[height,default] %(username) \n/
+			\f[height,-3]\![*](\q[%(change)?,OnTeachName,menu])\f[height,default]\n[150]"
+			--
+			"\f[height,-1]PRONOUNS:\f[height,default]\n%(nomPro)/%(oblPro)/%(posPro) \n/
+			\f[height,-3]\![*](\q[%(change)?,OnTeachPronouns,menu])\f[height,default]\n[150]"
+			--
+			"\f[height,-1]BIRTHDAY:\f[height,default]\n%(birthdayprint) \n/
+			\f[height,-3]\![*](\q[%(change)?,OnGetBirthday,menu])\f[height,default]\n[200]"
+			
+			--
+			if username == "Era" || username == "BugTest"
+			{
+				"Set Debug?\n"
+				--
+				if eraDebug == "ON"
+				{
+					"\f[color,#fb0300]\![*] \q[ON,OnMenuSelect,eDBon] \f[color,default]\n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \![*] \q[OFF,OnMenuSelect,eDBoff]\n[150]\f[align,left]"
+				}
+				else
+				{
+					"\![*] \q[ON,OnMenuSelect,eDBon] \n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \f[color,#fb0300]\![*] \q[OFF,OnMenuSelect,eDBoff]\f[color,default]\n\f[align,left]"
+				}
+			}
+			else
+			{
+				"\n[450]"
+			}
+			--
+			"\![*] \q[%(configMenu),OnMenu,settings]\n"
+			--	
+			"\![*] \q[%(backMenu),OnMenu,main]\n"
+			--
+			"\![*] \q[%(closeMenu),OnMenu,cancel]\e"
+		
+		}
+		when "settings"
+		{
+			"\0\b[2]\![set,autoscroll,disable]\f[align,center]Ghost Settings\_q\n\f[align,left]" 
+			--
+			
+			"TALK RATE: \nevery %(talktime) \n\f[height,14]\![*] (\q[%(change),OnMenu,talkrate])\f[height,default]\n[150]"
+			--
+			
+			"\n\![*] \q[Audio Settings,OnMenu,audio]\n" 
+			--
+			
+			"\![*] \q[Discord Rich Presence,OnDRPMenu]\n[150]"
+			--
+			if InDiscordPluginCustom == 1
+			{
+				"\f[color,#fb0300]\![*] \q[ON,OnDiscordPluginCustom] \f[color,default]\n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \![*] \q[OFF,OnDiscordPluginCustomEnd]\n[150]\f[align,left]"
+			}
+			else
+			{
+				"\![*] \q[ON,OnDiscordPluginCustom] \n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \f[color,#fb0300]\![*] \q[OFF,OnDiscordPluginCustomEnd]\f[color,default]\n\f[align,left]"
+			}
+			
+			--
+			"Enable Uninstall?\n"
+			--
+			if deleteshitai == "ON"
+			{
+				"\f[color,#fb0300]\![*] \q[ON,OnMenuSelect,deleteon] \f[color,default]\n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \![*] \q[OFF,OnMenuSelect,deleteoff]\n[150]\f[align,left]"
+			}
+			else
+			{
+				"\![*] \q[ON,OnMenuSelect,deleteon] \n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \f[color,#fb0300]\![*] \q[OFF,OnMenuSelect,deleteoff]\f[color,default]\n[150]\f[align,left]"
+			}
+			--	
+			"Confirm Recycle Bin?\n"
+			--
+			if verBalete == "ON"
+			{
+				"\f[color,#fb0300]\![*] \q[ON,OnMenuSelect,verBinOn] \f[color,default]\n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \![*] \q[OFF,OnMenuSelect,verBinOff]\n[150]\f[align,left]"
+			}
+			else
+			{
+				"\![*] \q[ON,OnMenuSelect,verBinOn] \n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \f[color,#fb0300]\![*] \q[OFF,OnMenuSelect,verBinOff]\f[color,default]\n[150]\f[align,left]"
+			}			
+			/* 
+			"Program Commentary?\n"
+			--
+			if canDesktopEye == "ON"
+			{
+				"\f[color,#fb0300]\![*] \q[ON,OnMenuSelect,cDEon] \f[color,default]\n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \![*] \q[OFF,OnMenuSelect,cDEoff]\n[150]\f[align,left]"
+			}
+			else
+			{
+				"\![*] \q[ON,OnMenuSelect,cDEon] \n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \f[color,#fb0300]\![*] \q[OFF,OnMenuSelect,cDEoff]\f[color,default]\n[150]\f[align,left]"
+			} 
+			*/
+			--
+			"\![*] \q[%(userMenu),OnMenu,user]\n"
+			--
+			"\![*] \q[%(backMenu),OnMenu,main]\n"
+			--
+			"\![*] \q[%(closeMenu),OnMenu,cancel]\e"		
+		}
+		when "audio"
+		{
+			"\0\b[2]\![set,autoscroll,disable]\f[align,center]Audio Settings\_q\n[200]\f[align,left]"
+			--
+			"Enable Silent Mode?\n"
+			--
+			if silentMode == "ON"
+			{
+				"\f[color,#fb0300]\![*]  \q[ON,OnMenuSelect,silenton] \f[color,default]\n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \![*]  \q[OFF,OnMenuSelect,silentoff] \n[200]\f[align,left]"
+			}
+			else
+			{
+				"\![*]  \q[ON,OnMenuSelect,silenton] \n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \f[color,#fb0300]\![*]  \q[OFF,OnMenuSelect,silentoff]\f[color,default]\n[200]\f[align,left]"
+				--
+				"\f[align,center]\![*] \q[Set Volume?,OnMenuSelect,volumeslider]\nCurrently: %(volume) \n\f[align,left]\n"
+			}
+			--
+			"Play Hourly Chimes?\n"
+			--
+			if hourChime == "ON"
+			{
+				"\f[color,#fb0300]\![*]  \q[ON,OnMenuSelect,bellon] \f[color,default]\n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \![*]  \q[OFF,OnMenuSelect,belloff] \n[200]\f[align,left]"
+			}
+			else
+			{
+				"\![*]  \q[ON,OnMenuSelect,bellon] \n \n[-100]\f[align,center]----\n \n[-100]\f[align,right] \f[color,#fb0300]\![*]  \q[OFF,OnMenuSelect,belloff]\f[color,default]\n[200]\f[align,left]"
+			}
+			--
+			"\![*] \q[%(configMenu),OnMenu,settings]\n"
+			--
+			"\![*] \q[%(backMenu),OnMenu,main]\n"
+			--
+			"\![*] \q[%(closeMenu),OnMenu,cancel]\e"	
+		}
+		when "talkrate"
+		{
+			"\b2\0\s[3]"
+			--
+			"%(Flowey)* Change [talktime]?\_w[500]\0\s[3]\n talktime == %(talktime). \ncommunicateratio == %(communicateratio)"
+			
+			"%(menuNarrator)* You can change how often f_lowe_y speaks.\_w[500]\0\s[3] The current rate is every %(talktime), with %(communicateratio)%(CHR(37))directed to other ghosts."
+			--
+			
+			"\0\n[150]/
+			\![*]  \q[Don't Talk,OnTalkSet,never]\n/
+			\![*]  \q[Every minute,OnTalkSet,one]\n/
+			\![*]  \q[Every 5 minutes,OnTalkSet,five]\n/
+			\![*]  \q[Every 15 minutes,OnTalkSet,fifteen]\n/
+			\![*]  \q[Every 30 minutes,OnTalkSet,thirty]\n[150]"
+			--
+			"\![*]  \q[Random Time,OnTalkSet,random]\n[150]"
+			--
+			'\![*] \q[ Custom Time,"script:\![open,sliderinput,OnTalkSet,,%(minutetalk),0,60]"]\n[150]'
+			--
+			"\![*]  \q[Change communicate ratio,OnTalkSet,changecommu]\n[150]/
+			\![*]  \q[Don't change,OnTalkSet,stay]\n[150]"
+			--
+			"\![*] \q[%(configMenu),OnMenu,settings]\n"
+			--
+			"\![*] \q[%(backMenu),OnMenu,main]\n"
+			--
+			"\![*] \q[%(closeMenu),OnMenu,cancel]\e"
+		
+		
+		}
+		when "functions"
+		{
+			"\0\s[3]%(Flowey)\b2 * ...\n[200]"
+			"\0\s[3]%(Flowey)\b2 * ACC_SSING FUNCTION M_NU\n[200]"
+			"\0\s[3]%(menuNarrator)\b2 * (You ask f_lowe_y to do something for you.)\n[200]"
+			
+			--
+			"\![*] \q[Open Calendar,OnMenuSelect,calendar]\n[150]/
+			\![*] \q[Check Email,OnMenuSelect,mailcheck]\n[150]/
+			\![*] \q[Open SSP Preferences,OnMenuSelect,sspconfig]\n[150]/
+			\![*] \q[Empty Recycle Bin,OnRecycleStart]\n[150]/
+			\![*] \q[System Information,OnRunCPUID]\n[200]/
+			\![*] \q[Discord Rich Presence,OnDRPMenu]\n[250]/
+			
+			\![*] \q[View Ghost Changelog,OnChangeLog,menu]\n[250]/
+			\![*] \q[%(backMenu),OnMenu,main]\n"
+			--
+			if username == "Era" || username == "BugTest"
+			{
+				"\n[200]\![*] \q[Test variable,OnTestVariable]\n"
+			}
+			else
+			{
+				"\e"
+			}
+		
+		}
+		when "stats" //"%(HP)"
+		{
+			OnCalculateStats
+			--
+			_wID = RAND(8) + 1
+			_aID = RAND(8) + 1
+			--
+			"\b2\![set,autoscroll,disable]\_q\n[50]\f[align,center]%(CHR(34))%(username)%(CHR(34)) \_q"
+			--
+			"\n[150]\f[align,left]"
+			--
+			"LV %(ellVee)\n/
+			HP %(HP)/%(HP)\n[200]/
+			AT NaN(NaN) EXP %(EXP)\n/
+			DF NaN(NaN) Next %(toNextLV)\n[200]/
+			WEAPON: weapon_id_%(_wID) \n/
+			ARMOR: equip_id_%(_aID) \n[200]"
+			--
+			"\_q\f[align,center]Key Items\n\f[align,left]\_q"
+			--
+			if ASEARCH("punching",agreedToConsequences) >= 0
+			{"a bit of torn petal\n"}
+			else
+			{"\n"}
+			--
+			if ASEARCH("naming",agreedToConsequences) >= 0
+			{"a nametag that says: \n%(CHR(34))\f[color,#fb0300]%(thatonename)\f[color,default]%(CHR(34))\n[200]"}
+			else
+			{"\n[300]"}
+			--
+			"\![*] \q[RESET STATS?,OnMenuSelect,resetstats]\n[150]"
+			--
+			"\![*] \q[%(backMenu),OnMenu,main]"
+				
+		}	
+		when "cancel"
+		{
+			"\0\s[3]%(Flowey) * Nevermind. "
+			"\0\s[3]%(Flowey) * Nevermind. "
+			"\0\s[3]%(Flowey) * Whatever. "
+		}
+		others
+		{
+			"\![embed,OnMenu,main]"
+		}
+	}
+
+}
+
+OnMenuSelect
+{
+	case reference[0]
+	{
+		// Private Debug Mode, nothing interesting here
+		when "eDBon" 
+		{
+			eraDebug = "ON"
+			"\![raise,OnMenu,user]"
+		}
+		when "eDBoff"
+		{
+			eraDebug = "OFF"
+			"\![raise,OnMenu,user]"
+		}
+		// Settings
+		when "deleteon" // Enable/Disable Uninstall
+		{
+			deleteshitai = "ON"
+			"\![raise,OnMenu,settings]"
+		}
+		when "deleteoff"
+		{
+			deleteshitai = "OFF"
+			"\![raise,OnMenu,settings]"
+		}
+		when "verBinOn" // Enable/Disable Verbose emptying recycle bin
+		{
+			verBalete = "ON"
+			"\![raise,OnMenu,settings]"
+		}
+		when "verBinOff"
+		{
+			verBalete = "OFF"
+			"\![raise,OnMenu,settings]"
+		}
+		// Audio Menu
+		when "silenton"	// Enable/Disable SilentMode
+		{
+			silentMode = "ON"
+			"\![raise,OnMenu,audio]"
+		}
+		when "silentoff"
+		{
+			silentMode = "OFF"
+			"\![raise,OnMenu,audio]"
+		}
+		when "volumeslider"
+		{
+			"\C\![open,sliderinput,OnSetVolume,,%(volume),1,100]"
+		}
+		when "bellon"
+		{
+			hourChime = "ON"
+			"\![raise,OnMenu,audio]"
+		}
+		when "belloff"
+		{
+			hourChime = "OFF"
+			"\![raise,OnMenu,audio]"
+		}
+		// The following are preserved for when I get the feature working
+		when "cDEon" // Enable/Disable DesktopEye
+		{
+			canDesktopEye = "ON"
+		}
+		when "cDEoff"
+		{
+			canDesktopEye = "OFF"
+		}
+		// Functions
+		when "calendar" // The caledar built into SSP
+		{
+			"\0\s[3]%(Flowey)* Op_ning th_ cal_nder.\![open,calendar]"
+		}
+		when "sspconfig" // When the user chooses SSP Preferences.
+		{
+			"\0\s[3]%(Flowey)* _pening the SSP c_nfig menu.\![open,configurationdialog]"
+		}
+		when "mailcheck"	// This is when the user chooses to check their email. The rest of this plays out in etc.dic.
+		{
+			"\![biff]"
+		}
+		// Stats
+		when "resetstats"
+		{
+			EXP = 0
+			HP = 20
+			ellVee = 1
+			knifeTime = 0
+			killCount = 0
+			toNextLV = 100
+			extraMood ,= "revulsion"
+			resetCount++
+			// agreedToConsequences = IARRAY
+			--
+			"\![raise,OnMenu,stats]"
+		}
+		
+	}
+}
+
+OnSetVolume
+{
+	volume = reference0
+	"\![raise,OnMenu,audio]"
+}
+
+OnTalkSet
+{
+	"\0\s[3]%(Flowey) * "
+	--
+	case reference[0]
+	{
+		when "never"
+		{
+			minutetalk = 0
+			talksetting = "never"
+			aitalkinterval = 0
+			
+			"..."
+		}
+		when "one"
+		{
+			minutetalk = 1
+			talksetting = "1 minute"
+			aitalkinterval = 60
+			
+			"1 minute."
+		}
+		when "five"
+		{
+			minutetalk = 5
+			talksetting = "5 minutes"
+			aitalkinterval = 300
+			
+			"5 minutes."
+		}
+		when "fifteen"
+		{
+			minutetalk = 15
+			talksetting = "15 minutes"
+			aitalkinterval = 900
+			
+			"15 minutes."
+		}
+		when "thirty"
+		{
+			minutetalk = 30
+			talksetting = "30 minutes"
+			aitalkinterval = 1800
+			
+			"30 minutes."
+		}
+		when "random"
+		{
+			minutetalk = (RAND(60) + 1)
+			talksetting = "%(minutetalk) minutes"
+			aitalkinterval = (minutetalk * 60)
+			
+			"%(minutetalk) minutes."
+		}
+		when "stay"
+		{
+			"No change."
+		}
+		when "changecommu"
+		{
+			"\n[200]Talk... others?\n %(Narrator) * Select a value from 0 to 100"
+			
+			"??? \n%(Narrator) * What percentage of the time would you like %(callHim) to try to communicate with other ghosts? \nSelect a value from 0 to 100."
+			--
+			"\C\![open,sliderinput,OnCommuSet,,%(communicateratio),0,100]"
+		}
+		others
+		{
+			minutetalk = reference[0]
+			if minutetalk != 0
+			{
+				talksetting = "%(minutetalk) minutes"
+				aitalkinterval = (minutetalk * 60)
+				
+				"%(minutetalk) minutes."
+			}
+			else
+			{
+				talksetting = "never"
+				aitalkinterval = 0
+				
+				"... \_w[500]\s[18]... \_w[500]\s[21]...\_w[500]"
+			}
+		}
+	}
+}
+
+OnCommuSet
+{
+	communicateratio = reference[0]
+	--
+	if communicateratio == 0
+	{
+		if ghostexcount > 0
+		{"\![set,otherghosttalk,false]%(Narrator) * He'll never know he isn't alone."}
+		else
+		{"\![set,otherghosttalk,false]%(Narrator) * He'll never know how alone he is."}
+		
+	}
+	else
+	{
+		"\![set,otherghosttalk,true]%(Narrator) * He will try to talk to other ghosts %(communicateratio)% of the time."
+	}
+	--
+	"\![timerraise,1000,1,OnMenu,talkrate]"
+}
+
+OnCalculateStats: void
+{
+	_xpCal = (knifeTime+(killCount*20)) // calculated EXP earned this LV
+	_lvCal = TOINT((EXP/100)+1)
+	
+	if _xpCal == (EXP%100) && _lvCal == ellVee
+	{}
+	else
+	{
+		if EXP < (((ellVee-1)*100)+_xpCal)
+		{
+			EXP = (((ellVee-1)*100)+_xpCal)
+		}
+		elseif EXP > (((ellVee-1)*100)+_xpCal)
+		{
+			ellVee = _lvCal
+			
+			knifeTime = ((EXP%100)%20)
+			killCount = ((EXP%100)/20)
+		}
+	}
+	--
+	_remainder = (EXP%100)
+	toNextLV = (100 - _remainder)
+	--
+	{
+		if ellVee >= 20 {HP = 99}
+		else
+		{
+			HP = (16 + (ellVee * 4))
+		}
+	}
+}
+//-------- Menu Caption Envelopes --------
+
+// These are the envelopes containing all the multi-version menu options used
+
+// This first one is ...something... because it's the whole line with tags and not just one phrase
+menuIntro: pool
+{
+	{
+		menuOption = 0
+		if ellVee >=2
+		{
+			"\0\s[3]%(Flowey)* \![embed,OnGLITCH,oooooooooOOOOOOOOOoooooooooOOOOOOOOO]\n\![embed,OnGLITCH,open menu.]\_w[1500]\c\_q* Howdy!!"
+			"\0\s[3]%(Flowey)* What-\![embed,OnGLITCH,what]-\![embed,OnGLITCH,what]- do you want?"
+			"\0\s[3]%(Flowey)* \![embed,OnGLITCH,need]\![embed,OnGLITCH,need]NEED?"
+		}
+		else
+		{
+			"\0\s[3]%(Flowey)* oooooooooOOOOOOOOO\nOpe_ Me_u.\_w[1500]\c\_q* Howdy!!"
+			"\0\s[3]%(Flowey)* What-\![embed,OnGLITCH,what]-do you want?"
+			"\0\s[3]%(Flowey)* NEED?"
+		}
+	}
+	{
+		menuOption = 1
+		if ellVee >= 2
+		{
+			"\0\s[3]%(menuNarrator)* (You tell him...)"
+			"\0\s[3]%(menuNarrator)* (You tell f_lowe_y...)"
+		}
+		else
+		{
+			"\0\s[3]%(menuNarrator)* (You ask him to...)"
+			"\0\s[3]%(menuNarrator)* (You ask f_lowe_y to...)"
+		}
+	}
+}
+
+//---- Conditional Choice captions ----
+
+rlTalk: pool
+{
+	if ellVee <= 3
+	{
+		if menuOption == 0
+		{
+			"RE-RE-REPE_T"
+		}
+		else
+		{
+			"Say that again..."
+			"Repeat Last Dialogue"
+			"select.ONLASTTALK"
+		}
+		
+	}
+	elseif ellVee <= 7
+	{
+		if menuOption == 0
+		{
+			"AGAIN?"
+		}
+		else
+		{
+			"Repeat Last Dialogue"
+			"Say. That. Again."
+		}
+	}
+	else
+	{
+		if menuOption == 0
+		{
+			"REPEAT?"
+		}
+		else
+		{
+			"Repeat That."
+			"Again."
+		}
+	}
+	
+}
+
+newTalk: pool
+{
+	"select.ONAITALK"
+	"Say something."
+	"Talk to me."
+	"SA_ _NYTHING"
+}
+
+ghostChat
+{
+	"Chat with Others"
+}
+userMenu: pool
+{
+	"select.USERMENU"
+	"User Menu"
+	"User Settings"
+	"Us_r _onf_gurat_on_"
+}
+
+configMenu: pool
+{
+	"select.CONFIGMENU"
+	"Config Menu"
+	"Configuration"
+	"C_NFIGURATI_N"
+}
+
+funMenu: pool
+{
+	"select.ONFUNMENU"
+	"Functions"
+	"Tools"
+	"FUNct_ons"
+}
+
+statsMenu: pool
+{
+	"select.ONSTATMENU"
+	"Check Stats"
+}
+
+backMenu: pool
+{
+	"Backbackbackback."
+	"Return to main menu"
+}
+
+closeMenu: pool
+{
+	if ellVee >=2
+	{
+		"Shut up."
+		"Go away."
+		"Nevermind."
+		"Ugh."
+	}
+	else
+	{
+		"Nevermind"
+		"N%(e_)V%(e_)RM%(i_)ND"
+		"Close"
+		"C%(l_)%(o_)%(s_)%(e_)"
+		"Close Menu"
+		"select.CANCEL"
+	}
+}
+
+
+	
+//---- OnChoiceTimeout ----
+//If the user is given a menu with choices, but doesn't pick one of the choices, it will eventually time out.
+
+OnChoiceTimeout
+ {
+	"\0\s[3]%(Flowey)* Come back when-when-when you actually want something."
+	--
+	"%(refTest)"
+ }
+
