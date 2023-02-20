@@ -29,14 +29,14 @@ teachbox.left,837
 Char6.center,1512
 dateinput.top,444
 Char3.balloon.isleft,1
-Char.VirtualDesktop,25ecbc91-011f-492d-ab6c-a1b6ad8414ac
+Char.VirtualDesktop,fb12d76f-da09-4838-9167-a8eb3109dd42
 Char4.center,629
 Char6.balloon.isleft,1
 dateinput.left,745
 teachbox.top,725
 timeinput.top,648
 Char2.center,896
-Char0.center,1145
+Char0.center,964
 scriptbox.top,94
 Char10.balloon.isleft,1
 passwordinput.left,810
@@ -44,7 +44,7 @@ Char8.balloon.isleft,1
 Char1.centery,900
 seriko.ignoremove,0
 Char3.centery,900
-Char1.center,1153
+Char1.center,972
 seriko.scaling.percent.x,100
 forceAlignFree,true
 seriko.scaling.balloon.percent.x,100
